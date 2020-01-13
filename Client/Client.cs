@@ -6,7 +6,7 @@ using Flurl.Http;
 
 namespace AzureDevOpsRestClient
 {
-    public class Client
+    public class Client : IClient
     {
         private readonly string _organization;
         private readonly string _token;

@@ -1,3 +1,4 @@
+using System.Linq;
 using System.Threading.Tasks;
 using AzureDevOpsRestClient.Data.Build;
 using FluentAssertions;
@@ -18,6 +19,18 @@ namespace AzureDevOpsRestClient.Requests.Tests
                 Id = 27,
                 Name = "riezebosch.vsts-tasks-packer"
             });
+        }
+        
+        [Fact]
+        public void List()
+        {
+            var client = new Client("manuel");
+            client
+                .GetAsync(Build.Builds("packer-tasks").WithQueryParams(("$top", 2)))
+                .ToEnumerable()
+                .Count()
+                .Should()
+                .BeGreaterThan(4);
         }
     }
 }

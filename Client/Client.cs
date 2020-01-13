@@ -1,5 +1,5 @@
 using System;
-using System.Net;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Flurl;
 using Flurl.Http;
@@ -20,6 +20,12 @@ namespace AzureDevOpsRestClient
                 .SetQueryParams(request.QueryParams)
                 .WithBasicAuth("", _token)
                 .GetJsonAsync<TData>();
+        
+        public IAsyncEnumerable<TData> GetAsync<TData>(IEnumerableRequest<TData> request) =>
+            request.Enumerator(new Url(request.BaseUrl(_organization))
+                .AppendPathSegment(request.Resource)
+                .SetQueryParams(request.QueryParams)
+                .WithBasicAuth("", _token));
 
         private static string Validate(string token)
         {

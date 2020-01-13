@@ -1,3 +1,4 @@
+using System;
 using System.Threading.Tasks;
 using Flurl;
 using Flurl.Http;
@@ -11,6 +12,8 @@ namespace AzureDevOpsRestClient
 
         public Client(string organization, string token)
         {
+            Validate(token);
+            
             _organization = organization;
             _token = token;
         }
@@ -23,5 +26,13 @@ namespace AzureDevOpsRestClient
                 .WithHeader("Content-Type", "application/json")
                 .WithBasicAuth("", _token)
                 .GetJsonAsync<TData>();
+
+        private static void Validate(string token)
+        {
+            if (!string.IsNullOrEmpty(token) && token.Length != 52)
+                throw new ArgumentException(
+                    "Token is expected to be null or empty for public projects or having length of 52 for private projects",
+                    nameof(token));
+        }
     }
 }

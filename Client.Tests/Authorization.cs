@@ -1,3 +1,4 @@
+using System;
 using System.Net;
 using System.Threading.Tasks;
 using FluentAssertions;
@@ -29,6 +30,18 @@ namespace AzureDevOpsRestClient.Tests
                 .ThrowAsync<FlurlHttpException>();
 
             ex.Which.Call.HttpStatus.Should().Be(HttpStatusCode.Unauthorized);
+        }
+        
+        [Fact]
+        public void TokenInvalid()
+        {
+            FluentActions.Invoking(() => new Client(_config.Organization, "asdf"))
+                .Should()
+                .Throw<ArgumentException>()
+                .Which
+                .ParamName
+                .Should()
+                .Be("token");
         }
     }
 }

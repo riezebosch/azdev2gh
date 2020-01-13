@@ -1,10 +1,10 @@
 using System.Collections.Generic;
 
-namespace AzureDevOpsRestClient
+namespace AzureDevOpsRestClient.Requests
 {
-    public class Request<TData>
+    public class Request<TData> : IRequest<TData>
     {
-        public IDictionary<string, object> Headers = new Dictionary<string, object>();
+        public IDictionary<string, object> Headers => new Dictionary<string, object>();
         public Request(string resource, string api)
         {
             Resource = resource;

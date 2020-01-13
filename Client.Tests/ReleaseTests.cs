@@ -1,5 +1,5 @@
 using System.Threading.Tasks;
-using AzureDevOpsRestClient.Data.Build;
+using AzureDevOpsRestClient.Data.Release;
 using AzureDevOpsRestClient.Requests;
 using FluentAssertions;
 using Xunit;
@@ -16,7 +16,7 @@ namespace AzureDevOpsRestClient.Tests
 
             result.Should().BeEquivalentTo(new Definition
             {
-                Id = 1it st,
+                Id = 1,
                 Name = "marketplace"
             });
         }

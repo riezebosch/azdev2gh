@@ -18,7 +18,7 @@ namespace AzureDevOpsRestClient
             _token = token;
         }
 
-        public Task<TData> GetAsync<TData>(Request<TData> request) =>
+        public Task<TData> GetAsync<TData>(IRequest<TData> request) =>
             new Url(request.BaseUrl(_organization))
                 .AppendPathSegment(request.Resource)
                 .AllowHttpStatus()

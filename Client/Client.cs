@@ -1,4 +1,5 @@
 using System;
+using System.Net;
 using System.Threading.Tasks;
 using Flurl;
 using Flurl.Http;
@@ -21,9 +22,7 @@ namespace AzureDevOpsRestClient
         public Task<TData> GetAsync<TData>(IRequest<TData> request) =>
             new Url(request.BaseUrl(_organization))
                 .AppendPathSegment(request.Resource)
-                .AllowHttpStatus()
-                .WithHeaders(request.Headers)
-                .WithHeader("Content-Type", "application/json")
+                .SetQueryParams(request.QueryParams)
                 .WithBasicAuth("", _token)
                 .GetJsonAsync<TData>();
 

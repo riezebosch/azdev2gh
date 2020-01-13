@@ -11,7 +11,7 @@ namespace AzureDevOpsRestClient.Tests
         [Fact]
         public async Task Get()
         {
-            var client = new Client("manuel", "");
+            var client = new Client("manuel");
             var result = await client.GetAsync(Release.Definition("packer-tasks", 1));
 
             result.Should().BeEquivalentTo(new Definition

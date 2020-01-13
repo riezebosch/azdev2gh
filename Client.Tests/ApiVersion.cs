@@ -12,7 +12,7 @@ namespace AzureDevOpsRestClient.Tests
         [Fact]
         public async Task InvalidApiVersion_BadRequest()
         {
-            var client = new Client("manuel", "");
+            var client = new Client("manuel");
             var ex = await client
                 .Invoking(x => x.GetAsync(new Request<object>($"packer-tasks/_apis/build/definitions", "89")))
                 .Should()

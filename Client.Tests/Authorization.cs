@@ -15,14 +15,14 @@ namespace AzureDevOpsRestClient.Tests
         public Authorization(TestConfig config) => _config = config;
 
         [Fact]
-        public async Task Private_Project_WithToken_Ok()
+        public async Task PrivateProject_Authorized()
         {
             var client = new Client(_config.Organization, _config.Token);
             await client.GetAsync(new Request<object>($"/_apis/projects", "5.1"));
         }
         
         [Fact]
-        public async Task PrivateProject_WithoutToken_Unauthorized()
+        public async Task PrivateProject_WrongToken_Unauthorized()
         {
             var client = new Client(_config.Organization, new string('x', 52));
             var ex = await client
@@ -34,7 +34,7 @@ namespace AzureDevOpsRestClient.Tests
         }
         
         [Fact]
-        public void TokenInvalid()
+        public void InvalidToken_ArgumentException()
         {
             FluentActions.Invoking(() => new Client(_config.Organization, "asdf"))
                 .Should()

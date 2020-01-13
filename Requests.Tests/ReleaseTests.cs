@@ -1,10 +1,9 @@
 using System.Threading.Tasks;
 using AzureDevOpsRestClient.Data.Release;
-using AzureDevOpsRestClient.Requests;
 using FluentAssertions;
 using Xunit;
 
-namespace AzureDevOpsRestClient.Tests
+namespace AzureDevOpsRestClient.Requests.Tests
 {
     public class ReleaseTest
     {

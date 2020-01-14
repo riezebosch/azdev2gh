@@ -1,10 +1,10 @@
 using System.Linq;
 using System.Threading.Tasks;
-using AzureDevOpsRestClient.Data.Build;
+using AzureDevOpsRest.Data.Build;
 using FluentAssertions;
 using Xunit;
 
-namespace AzureDevOpsRestClient.Requests.Tests
+namespace AzureDevOpsRest.Requests.Tests
 {
     public class BuildTests
     {

@@ -1,10 +1,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
-using AzureDevOpsRestClient.Data;
+using AzureDevOpsRest.Data;
 using Flurl.Http;
 
-namespace AzureDevOpsRestClient.Requests
+namespace AzureDevOpsRest.Requests
 {
     public class EnumerableRequest<TData> : Request<TData>, IEnumerableRequest<TData>
     {

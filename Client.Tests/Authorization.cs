@@ -1,12 +1,12 @@
 using System;
 using System.Net;
 using System.Threading.Tasks;
-using AzureDevOpsRestClient.Requests;
+using AzureDevOpsRest.Requests;
 using FluentAssertions;
 using Flurl.Http;
 using Xunit;
 
-namespace AzureDevOpsRestClient.Tests
+namespace AzureDevOpsRest.Tests
 {
     public class Authorization : IClassFixture<TestConfig>
     {

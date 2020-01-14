@@ -2,7 +2,7 @@
 
     <PropertyGroup>
         <TargetFramework>netcoreapp3.0</TargetFramework>
-        <RootNamespace>AzureDevOpsRestClient.Requests</RootNamespace>
+        <RootNamespace>AzureDevOpsRest.Requests</RootNamespace>
     </PropertyGroup>
 
     <ItemGroup>

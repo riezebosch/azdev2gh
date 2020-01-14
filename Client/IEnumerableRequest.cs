@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using Flurl.Http;
 
-namespace AzureDevOpsRestClient
+namespace AzureDevOpsRest
 {
     public interface IEnumerableRequest<TData> : IRequest<TData>
     {

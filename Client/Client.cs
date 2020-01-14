@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 using Flurl;
 using Flurl.Http;
 
-namespace AzureDevOpsRestClient
+namespace AzureDevOpsRest
 {
     public class Client : IClient
     {

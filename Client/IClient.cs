@@ -1,6 +1,6 @@
 using System.Threading.Tasks;
 
-namespace AzureDevOpsRestClient
+namespace AzureDevOpsRest
 {
     public interface IClient
     {

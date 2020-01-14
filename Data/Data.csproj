@@ -2,7 +2,7 @@
 
     <PropertyGroup>
         <TargetFramework>netcoreapp2.2</TargetFramework>
-        <RootNamespace>AzureDevOpsRestClient.Data</RootNamespace>
+        <RootNamespace>AzureDevOpsRest.Data</RootNamespace>
     </PropertyGroup>
 
 </Project>

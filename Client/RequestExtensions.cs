@@ -1,4 +1,4 @@
-namespace AzureDevOpsRestClient
+namespace AzureDevOpsRest
 {
     public static class RequestExtensions
     { 

@@ -1,6 +1,6 @@
-using AzureDevOpsRestClient.Data.Release;
+using AzureDevOpsRest.Data.Release;
 
-namespace AzureDevOpsRestClient.Requests
+namespace AzureDevOpsRest.Requests
 {
     public static class Build
     {
@@ -10,7 +10,7 @@ namespace AzureDevOpsRestClient.Requests
         public static IEnumerableRequest<Definition> Definitions(string project) => 
             new EnumerableRequest<Definition>($"{project}/_apis/build/definitions/", "5.1");
 
-        public static IEnumerableRequest<AzureDevOpsRestClient.Data.Build.Build> Builds(string project) =>
-            new EnumerableRequest<AzureDevOpsRestClient.Data.Build.Build>($"{project}/_apis/build/builds/", "5.1");
+        public static IEnumerableRequest<Data.Build.Build> Builds(string project) =>
+            new EnumerableRequest<Data.Build.Build>($"{project}/_apis/build/builds/", "5.1");
     }
 }

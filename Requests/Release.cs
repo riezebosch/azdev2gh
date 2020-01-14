@@ -1,6 +1,6 @@
-using AzureDevOpsRestClient.Data.Release;
+using AzureDevOpsRest.Data.Release;
 
-namespace AzureDevOpsRestClient.Requests
+namespace AzureDevOpsRest.Requests
 {
     public static class Release
     {

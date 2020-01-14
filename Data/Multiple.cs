@@ -1,4 +1,4 @@
-namespace AzureDevOpsRestClient.Data
+namespace AzureDevOpsRest.Data
 {
     public class Multiple<T>
     {

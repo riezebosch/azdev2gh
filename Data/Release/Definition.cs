@@ -1,4 +1,4 @@
-namespace AzureDevOpsRestClient.Data.Release
+namespace AzureDevOpsRest.Data.Release
 {
     public class Definition
     {

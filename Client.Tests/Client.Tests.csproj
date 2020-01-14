@@ -5,7 +5,7 @@
 
         <IsPackable>false</IsPackable>
 
-        <RootNamespace>AzureDevOpsRestClient.Tests</RootNamespace>
+        <RootNamespace>AzureDevOpsRest.Tests</RootNamespace>
     </PropertyGroup>
 
     <ItemGroup>

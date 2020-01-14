@@ -1,4 +1,4 @@
-namespace AzureDevOpsRestClient.Data.Build
+namespace AzureDevOpsRest.Data.Build
 {
     public class Definition
     {

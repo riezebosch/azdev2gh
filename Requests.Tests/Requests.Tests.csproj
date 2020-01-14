@@ -2,7 +2,7 @@
 
     <PropertyGroup>
         <TargetFramework>netcoreapp3.0</TargetFramework>
-        <RootNamespace>AzureDevOpsRestClient.Requests.Tests</RootNamespace>
+        <RootNamespace>AzureDevOpsRest.Requests.Tests</RootNamespace>
         <LangVersion>Latest</LangVersion>
         <IsPackable>false</IsPackable>
     </PropertyGroup>

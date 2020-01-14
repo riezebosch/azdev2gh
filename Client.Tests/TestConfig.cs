@@ -1,6 +1,6 @@
 using Microsoft.Extensions.Configuration;
 
-namespace AzureDevOpsRestClient.Tests
+namespace AzureDevOpsRest.Tests
 {
     public class TestConfig
     {

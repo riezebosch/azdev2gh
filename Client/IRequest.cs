@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace AzureDevOpsRestClient
+namespace AzureDevOpsRest
 {
     public interface IRequest<TData>
     {

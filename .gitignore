@@ -3,3 +3,5 @@ obj/
 /packages/
 .idea/
 settings.user.json
+/reports/
+coverage.opencover.xml

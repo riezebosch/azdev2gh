@@ -15,5 +15,8 @@ namespace AzureDevOpsRest.Requests
         
         public static IRequest<Definition> Definition(string project, int id)
             => new Request<Definition>($"{project}/_apis/release/definitions/{id}", "5.1");
+
+        public static IEnumerableRequest<Definition> Definitions(string project)
+            => new Request<Definition>($"{project}/_apis/release/definitions", "5.1").AsEnumerable();
     }
 }

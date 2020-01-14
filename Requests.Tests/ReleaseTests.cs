@@ -1,3 +1,4 @@
+using System.Linq;
 using System.Threading.Tasks;
 using AzureDevOpsRest.Data.Release;
 using FluentAssertions;
@@ -18,6 +19,17 @@ namespace AzureDevOpsRest.Requests.Tests
                 Id = 1,
                 Name = "marketplace"
             });
+        }
+        
+        [Fact]
+        public void List()
+        {
+            var client = new Client("manuel");
+            client
+                .GetAsync(Release.Definitions("packer-tasks"))
+                .ToEnumerable()
+                .Should()
+                .NotBeEmpty();
         }
     }
 }

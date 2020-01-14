@@ -14,5 +14,7 @@ namespace AzureDevOpsRest.Requests
         public string Resource { get; }
 
         public virtual string BaseUrl(string organization) =>  $"https://dev.azure.com/{organization}/";
+        
+        public IEnumerableRequest<TData> AsEnumerable() => new EnumerableRequest<TData>(this);
     }
 }

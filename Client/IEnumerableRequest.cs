@@ -3,8 +3,9 @@ using Flurl.Http;
 
 namespace AzureDevOpsRest
 {
-    public interface IEnumerableRequest<TData> : IRequest<TData>
+    public interface IEnumerableRequest<TData>
     {
+        IRequest<TData> Request { get; }
         IAsyncEnumerable<TData> Enumerator(IFlurlRequest request);
     }
 }

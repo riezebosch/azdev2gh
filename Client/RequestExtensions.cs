@@ -6,7 +6,7 @@ namespace AzureDevOpsRest
         {
             foreach (var (key, value) in items)
             {
-                request.QueryParams[key] = value;
+                request.Request.QueryParams[key] = value;
             }
             return request;
         }

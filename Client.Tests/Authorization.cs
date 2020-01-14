@@ -27,7 +27,7 @@ namespace AzureDevOpsRest.Tests
         {
             var client = new Client(_config.Organization, _config.Token);
             client
-                .GetAsync(new EnumerableRequest<object>($"/_apis/projects", "5.1"))
+                .GetAsync(new Request<object>($"/_apis/projects", "5.1").AsEnumerable())
                 .ToEnumerable()
                 .Should()
                 .NotBeEmpty();

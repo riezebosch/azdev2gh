@@ -6,11 +6,12 @@ using Flurl.Http;
 
 namespace AzureDevOpsRest.Requests
 {
-    public class EnumerableRequest<TData> : Request<TData>, IEnumerableRequest<TData>
+    public class EnumerableRequest<TData> : IEnumerableRequest<TData>
     {
-        public EnumerableRequest(string resource, string version) : base(resource, version)
-        {
-        }
+        public EnumerableRequest(Request<TData> request) =>
+            Request = request;
+
+        public IRequest<TData> Request { get; }
 
         public async IAsyncEnumerable<TData> Enumerator(IFlurlRequest request)
         {

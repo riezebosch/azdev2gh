@@ -22,7 +22,7 @@ namespace AzureDevOpsRest
             Request(request).GetJsonAsync<TData>();
         
         public IAsyncEnumerable<TData> GetAsync<TData>(IEnumerableRequest<TData> request) =>
-            request.Enumerator(Request(request));
+            request.Enumerator(Request(request.Request));
 
         private IFlurlRequest Request<TData>(IRequest<TData> request) =>
             new Url(request.BaseUrl(_organization))

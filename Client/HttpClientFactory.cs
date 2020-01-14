@@ -7,6 +7,6 @@ namespace AzureDevOpsRest
     public class HttpClientFactory : DefaultHttpClientFactory
     {
         public override HttpClient CreateHttpClient(HttpMessageHandler handler) => 
-            base.CreateHttpClient(new NonAuthoritativeInformationHandler(handler));
+            base.CreateHttpClient(new NotFoundHandler(new NonAuthoritativeInformationHandler(handler)));
     }
 }

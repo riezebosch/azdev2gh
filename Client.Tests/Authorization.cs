@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
@@ -33,7 +32,6 @@ namespace AzureDevOpsRest.Tests
                 .Should()
                 .NotBeEmpty();
         }
-
 
         [Fact]
         public async Task PrivateProject_WrongToken_Unauthorized()
@@ -82,25 +80,6 @@ namespace AzureDevOpsRest.Tests
                 .Message
                 .Should()
                 .Contain("expected to be null or empty");
-        }
-        
-        private class TestRequest : IRequest<object>
-        {
-            public TestRequest(string resource) => Resource = resource;
-
-            public string Resource { get; }
-            public IDictionary<string, object> QueryParams { get; } = new Dictionary<string, object>();
-            public string BaseUrl(string organization) => $"https://dev.azure.com/{organization}";
-        }
-
-        private class TestEnumerableRequest : IEnumerableRequest<object>
-        {
-            public TestEnumerableRequest(string resource) => 
-                Request = new TestRequest(resource);
-
-            public IRequest<object> Request { get; }
-            public IAsyncEnumerable<object> Enumerator(IFlurlRequest request) => 
-                request.GetJsonAsync<object>().ToAsyncEnumerable();
         }
     }
 }

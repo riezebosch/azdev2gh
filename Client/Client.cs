@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Net;
 using System.Threading.Tasks;
 using Flurl;
 using Flurl.Http;
@@ -19,7 +20,7 @@ namespace AzureDevOpsRest
             FlurlHttp.Configure(settings => settings.HttpClientFactory = new HttpClientFactory());
 
         public Task<TData> GetAsync<TData>(IRequest<TData> request) =>
-            Setup(request).GetJsonAsync<TData>();
+            Setup(request).AllowHttpStatus(HttpStatusCode.NotFound).GetJsonAsync<TData>();
         
         public IAsyncEnumerable<TData> GetAsync<TData>(IEnumerableRequest<TData> enumerable) =>
             enumerable.Enumerator(Setup(enumerable.Request));

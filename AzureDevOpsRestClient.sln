@@ -7,6 +7,7 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Items", "Items", "{40D5CCAA-640E-4715-BF90-78343424E2BE}"
 ProjectSection(SolutionItems) = preProject
 	.gitignore = .gitignore
+	.editorconfig = .editorconfig
 EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Data", "Data\Data.csproj", "{1CA7D602-3E81-4A36-A67E-D77639E7EAD8}"

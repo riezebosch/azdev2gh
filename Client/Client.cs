@@ -19,12 +19,12 @@ namespace AzureDevOpsRest
             FlurlHttp.Configure(settings => settings.HttpClientFactory = new HttpClientFactory());
 
         public Task<TData> GetAsync<TData>(IRequest<TData> request) =>
-            Request(request).GetJsonAsync<TData>();
+            Setup(request).GetJsonAsync<TData>();
         
-        public IAsyncEnumerable<TData> GetAsync<TData>(IEnumerableRequest<TData> request) =>
-            request.Enumerator(Request(request.Request));
+        public IAsyncEnumerable<TData> GetAsync<TData>(IEnumerableRequest<TData> enumerable) =>
+            enumerable.Enumerator(Setup(enumerable.Request));
 
-        private IFlurlRequest Request<TData>(IRequest<TData> request) =>
+        private IFlurlRequest Setup<TData>(IRequest<TData> request) =>
             new Url(request.BaseUrl(_organization))
                 .AppendPathSegment(request.Resource)
                 .SetQueryParams(request.QueryParams)
@@ -33,9 +33,7 @@ namespace AzureDevOpsRest
         private static string Validate(string token)
         {
             if (!string.IsNullOrEmpty(token) && token.Length != 52)
-                throw new ArgumentException(
-                    "Token is expected to be null or empty for public projects or having length of 52 for private projects",
-                    nameof(token));
+                throw new ArgumentException("Token is expected to be null or empty for public projects or having length of 52 for private projects", nameof(token));
 
             return token;
         }

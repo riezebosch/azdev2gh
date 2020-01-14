@@ -9,7 +9,7 @@ namespace AzureDevOpsRest.Requests.Tests
     public class BuildTests
     {
         [Fact]
-        public async Task Get()
+        public async Task Definition()
         {
             var client = new Client("manuel");
             var result = await client.GetAsync(Build.Definition("packer-tasks", 27));
@@ -22,7 +22,18 @@ namespace AzureDevOpsRest.Requests.Tests
         }
         
         [Fact]
-        public void List()
+        public void Definitions()
+        {
+            var client = new Client("manuel");
+            client
+                .GetAsync(Build.Definitions("packer-tasks"))
+                .ToEnumerable()
+                .Should()
+                .NotBeEmpty();
+        }
+        
+        [Fact]
+        public void Continuation()
         {
             var client = new Client("manuel");
             client

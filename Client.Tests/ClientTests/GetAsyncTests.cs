@@ -6,13 +6,13 @@ using FluentAssertions;
 using Flurl.Http;
 using Xunit;
 
-namespace AzureDevOpsRest.Tests
+namespace AzureDevOpsRest.Tests.ClientTests
 {
-    public class Authorization : IClassFixture<TestConfig>
+    public class GetAsyncTests : IClassFixture<TestConfig>
     {
         private readonly TestConfig _config;
 
-        public Authorization(TestConfig config) => 
+        public GetAsyncTests(TestConfig config) => 
             _config = config;
 
         [Fact]
@@ -60,26 +60,23 @@ namespace AzureDevOpsRest.Tests
         [Fact]
         public async Task PublicProject_EmptyToken()
         {
-            var client = new Client("manuel", "");
+            var client = new Client("manuel");
             await client.GetAsync(new TestRequest($"packer-tasks/_apis/build/builds"));
         }
+
+        [Fact]
+        public static void RequestArgumentNull() =>
+            FluentActions
+                .Invoking(() => new Client("manuel").GetAsync((IRequest<object>) null))
+                .Should()
+                .Throw<ArgumentNullException>();
         
         [Fact]
-        public void InvalidToken_ArgumentException()
-        {
-            var ex = FluentActions.Invoking(() => new Client(_config.Organization, "asdf"))
+        public static void EnumerableArgumentNull() =>
+            FluentActions
+                .Invoking(() => new Client("manuel").GetAsync((IEnumerableRequest<object>) null))
                 .Should()
-                .Throw<ArgumentException>();
-            
-            ex.Which
-                .ParamName
-                .Should()
-                .Be("token");
+                .Throw<ArgumentNullException>();
 
-            ex.Which
-                .Message
-                .Should()
-                .Contain("expected to be null or empty");
-        }
     }
 }

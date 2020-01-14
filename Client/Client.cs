@@ -10,33 +10,37 @@ namespace AzureDevOpsRest
     public class Client : IClient
     {
         private readonly string _organization;
-        private readonly string _token;
-        
-        public Client(string organization) => 
+        private readonly PersonalAccessToken _token;
+
+        public Client(string organization, PersonalAccessToken token)
+        {
             _organization = organization;
-        public Client(string organization, string token) : this(organization) => 
-            _token = Validate(token);
+            _token = token;
+        }
+
+        public Client(string organization) : this(organization, PersonalAccessToken.Empty) 
+        {
+        }
+
         static Client() => 
             FlurlHttp.Configure(settings => settings.HttpClientFactory = new HttpClientFactory());
 
-        public Task<TData> GetAsync<TData>(IRequest<TData> request) =>
-            Setup(request).AllowHttpStatus(HttpStatusCode.NotFound).GetJsonAsync<TData>();
-        
-        public IAsyncEnumerable<TData> GetAsync<TData>(IEnumerableRequest<TData> enumerable) =>
-            enumerable.Enumerator(Setup(enumerable.Request));
+        public Task<TData> GetAsync<TData>(IRequest<TData> request)
+        {
+            if (request == null) throw new ArgumentNullException(nameof(request));
+            return Setup(request).AllowHttpStatus(HttpStatusCode.NotFound).GetJsonAsync<TData>();
+        }
+
+        public IAsyncEnumerable<TData> GetAsync<TData>(IEnumerableRequest<TData> enumerable)
+        {
+            if (enumerable == null) throw new ArgumentNullException(nameof(enumerable));
+            return enumerable.Enumerator(Setup(enumerable.Request));
+        }
 
         private IFlurlRequest Setup<TData>(IRequest<TData> request) =>
             new Url(request.BaseUrl(_organization))
                 .AppendPathSegment(request.Resource)
                 .SetQueryParams(request.QueryParams)
                 .WithBasicAuth(string.Empty, _token);
-
-        private static string Validate(string token)
-        {
-            if (!string.IsNullOrEmpty(token) && token.Length != 52)
-                throw new ArgumentException("Token is expected to be null or empty for public projects or having length of 52 for private projects", nameof(token));
-
-            return token;
-        }
     }
 }

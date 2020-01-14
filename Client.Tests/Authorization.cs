@@ -46,6 +46,18 @@ namespace AzureDevOpsRest.Tests
         }
         
         [Fact]
+        public async Task NoToken_PrivateProject_Unauthorized()
+        {
+            var client = new Client(_config.Organization);
+            var ex = await client
+                .Invoking(x => x.GetAsync(new Request<object>($"/_apis/projects", "5.1")))
+                .Should()
+                .ThrowAsync<FlurlHttpException>();
+
+            ex.Which.Call.HttpStatus.Should().Be(HttpStatusCode.Unauthorized);
+        }
+        
+        [Fact]
         public void InvalidToken_ArgumentException()
         {
             var ex = FluentActions.Invoking(() => new Client(_config.Organization, "asdf"))

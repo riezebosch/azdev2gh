@@ -11,8 +11,12 @@ namespace AzureDevOpsRest
         private readonly string _organization;
         private readonly string _token;
         
-        public Client(string organization) => _organization = organization;
-        public Client(string organization, string token) : this(organization) => _token = Validate(token);
+        public Client(string organization) => 
+            _organization = organization;
+        public Client(string organization, string token) : this(organization) => 
+            _token = Validate(token);
+        static Client() => 
+            FlurlHttp.Configure(settings => settings.HttpClientFactory = new HttpClientFactory());
 
         public Task<TData> GetAsync<TData>(IRequest<TData> request) =>
             Request(request).GetJsonAsync<TData>();

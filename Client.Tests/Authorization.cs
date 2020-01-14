@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using AzureDevOpsRest.Requests;
@@ -22,6 +23,17 @@ namespace AzureDevOpsRest.Tests
         }
         
         [Fact]
+        public void PrivateProject_Multiple_Authorized()
+        {
+            var client = new Client(_config.Organization, _config.Token);
+            client
+                .GetAsync(new EnumerableRequest<object>($"/_apis/projects", "5.1"))
+                .ToEnumerable()
+                .Should()
+                .NotBeEmpty();
+        }
+
+        [Fact]
         public async Task PrivateProject_WrongToken_Unauthorized()
         {
             var client = new Client(_config.Organization, new string('x', 52));
@@ -36,13 +48,19 @@ namespace AzureDevOpsRest.Tests
         [Fact]
         public void InvalidToken_ArgumentException()
         {
-            FluentActions.Invoking(() => new Client(_config.Organization, "asdf"))
+            var ex = FluentActions.Invoking(() => new Client(_config.Organization, "asdf"))
                 .Should()
-                .Throw<ArgumentException>()
-                .Which
+                .Throw<ArgumentException>();
+            
+            ex.Which
                 .ParamName
                 .Should()
                 .Be("token");
+
+            ex.Which
+                .Message
+                .Should()
+                .Contain("expected to be null or empty");
         }
     }
 }

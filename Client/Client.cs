@@ -15,17 +15,16 @@ namespace AzureDevOpsRest
         public Client(string organization, string token) : this(organization) => _token = Validate(token);
 
         public Task<TData> GetAsync<TData>(IRequest<TData> request) =>
+            Request(request).GetJsonAsync<TData>();
+        
+        public IAsyncEnumerable<TData> GetAsync<TData>(IEnumerableRequest<TData> request) =>
+            request.Enumerator(Request(request));
+
+        private IFlurlRequest Request<TData>(IRequest<TData> request) =>
             new Url(request.BaseUrl(_organization))
                 .AppendPathSegment(request.Resource)
                 .SetQueryParams(request.QueryParams)
-                .WithBasicAuth("", _token)
-                .GetJsonAsync<TData>();
-        
-        public IAsyncEnumerable<TData> GetAsync<TData>(IEnumerableRequest<TData> request) =>
-            request.Enumerator(new Url(request.BaseUrl(_organization))
-                .AppendPathSegment(request.Resource)
-                .SetQueryParams(request.QueryParams)
-                .WithBasicAuth("", _token));
+                .WithBasicAuth(string.Empty, _token);
 
         private static string Validate(string token)
         {

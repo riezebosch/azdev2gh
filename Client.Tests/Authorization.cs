@@ -23,7 +23,7 @@ namespace AzureDevOpsRest.Tests
         }
         
         [Fact]
-        public void PrivateProject_Multiple_Authorized()
+        public void PrivateProject_EnumerableRequest_Authorized()
         {
             var client = new Client(_config.Organization, _config.Token);
             client
@@ -46,7 +46,7 @@ namespace AzureDevOpsRest.Tests
         }
         
         [Fact]
-        public async Task NoToken_PrivateProject_Unauthorized()
+        public async Task PrivateProject_NonAuthoritativeInformation_Unauthorized()
         {
             var client = new Client(_config.Organization);
             var ex = await client
@@ -55,6 +55,13 @@ namespace AzureDevOpsRest.Tests
                 .ThrowAsync<FlurlHttpException>();
 
             ex.Which.Call.HttpStatus.Should().Be(HttpStatusCode.Unauthorized);
+        }
+        
+        [Fact]
+        public async Task PublicProject_EmptyToken()
+        {
+            var client = new Client("manuel", "");
+            await client.GetAsync(new Request<object>($"packer-tasks/_apis/build/builds", "5.1"));
         }
         
         [Fact]

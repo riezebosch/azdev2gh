@@ -6,7 +6,7 @@ namespace AzureDevOpsRest.Requests
     {
         private class Request<TData> : Requests.Request<TData>
         {
-            public Request(string resource, string api) : base(resource, api)
+            public Request(string resource, string version) : base(resource, version)
             {
             }
 

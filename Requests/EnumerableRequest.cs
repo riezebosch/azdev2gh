@@ -8,7 +8,7 @@ namespace AzureDevOpsRest.Requests
 {
     public class EnumerableRequest<TData> : Request<TData>, IEnumerableRequest<TData>
     {
-        public EnumerableRequest(string resource, string api) : base(resource, api)
+        public EnumerableRequest(string resource, string version) : base(resource, version)
         {
         }
 

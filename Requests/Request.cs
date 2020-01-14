@@ -5,10 +5,10 @@ namespace AzureDevOpsRest.Requests
     public class Request<TData> : IRequest<TData>
     {
         public IDictionary<string, object> QueryParams { get; } = new Dictionary<string, object>();
-        public Request(string resource, string api)
+        public Request(string resource, string version)
         {
             Resource = resource;
-            QueryParams["api-version"] = api;
+            QueryParams["api-version"] = version;
         }
 
         public string Resource { get; }

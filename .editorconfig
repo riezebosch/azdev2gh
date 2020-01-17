@@ -2,6 +2,7 @@
 dotnet_diagnostic.CA1724.severity = none
 dotnet_diagnostic.CA1055.severity = none
 dotnet_diagnostic.CA1303.severity = none
+dotnet_diagnostic.CA2007.severity = none
 
 [Data/*.cs]
 dotnet_diagnostic.CA1819.severity = none

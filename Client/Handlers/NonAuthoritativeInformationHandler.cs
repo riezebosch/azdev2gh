@@ -13,7 +13,7 @@ namespace AzureDevOpsRest.Handlers
 
         protected override async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
         {
-            var result = await base.SendAsync(request, cancellationToken).ConfigureAwait(false);
+            var result = await base.SendAsync(request, cancellationToken);
             if (result.StatusCode == HttpStatusCode.NonAuthoritativeInformation)
             {
                 result.StatusCode = HttpStatusCode.Unauthorized;

@@ -21,7 +21,7 @@ namespace AzureDevOpsRest.Requests
                 var task = request.GetAsync();
                 more = HandleContinuation(request, await task.ConfigureAwait(false));
 
-                var items = await task.ReceiveJson<Multiple<TData>>().ConfigureAwait(false);
+                var items = await task.ReceiveJson<Multiple<TData>>();
                 foreach (var item in items.Value)
                 {
                     yield return item;

@@ -26,7 +26,7 @@ namespace AzureDevOpsRest.Tests
 
         [Fact]
         public static void FromNullToStringToToken() =>
-            ((PersonalAccessToken) (string) null)
+            ((PersonalAccessToken) null)
             .Should()
             .Be(PersonalAccessToken.Empty);
 
@@ -37,9 +37,60 @@ namespace AzureDevOpsRest.Tests
             .Be(string.Empty);
 
         [Fact]
-        public static void FromStringWithNull() =>
+        public static void FromStringNull() =>
             PersonalAccessToken.FromString(null)
                 .Should()
                 .Be(PersonalAccessToken.Empty);
+        
+        [Fact]
+        public static void NotEquals() =>
+            PersonalAccessToken.Empty
+                .Should()
+                .NotBe(4);
+        
+        [Fact]
+        public static void DefaultStructShouldBeEmpty()
+        {
+            PersonalAccessToken token;
+            token.Should()
+                .Be(PersonalAccessToken.Empty);
+        }
+        
+        [Fact]
+        public static void OrdinalEquals()
+        {
+            var token = new string('x', 52);
+            ((PersonalAccessToken) token)
+                .Should()
+                .NotBe((PersonalAccessToken)token.ToUpper());
+        }
+        
+        [Fact]
+        public static void OrdinalHashCode()
+        {
+            var token = new string('x', 52);
+            ((PersonalAccessToken) token).GetHashCode()
+                .Should()
+                .NotBe(((PersonalAccessToken) token.ToUpper()).GetHashCode());
+        }
+        
+        [Fact]
+        public static void OperatorEquals()
+        {
+            var source = new string('x', 52);
+            PersonalAccessToken token1 = source;
+            PersonalAccessToken token2 = source;
+
+            (token1 == token2).Should().BeTrue();
+        }
+        
+        [Fact]
+        public static void OperatorNotEquals()
+        {
+            PersonalAccessToken token1 = new string('x', 52);
+            PersonalAccessToken token2 = new string('y', 52);
+
+            (token1 != token2).Should().BeTrue();
+        }
     }
 }

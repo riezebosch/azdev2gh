@@ -21,7 +21,7 @@ namespace AzureDevOpsRest.Tests
             ex.Which
                 .Message
                 .Should()
-                .Contain("expected to be null or empty");
+                .Contain("expected to be empty");
         }
 
         [Fact]
@@ -38,8 +38,8 @@ namespace AzureDevOpsRest.Tests
 
         [Fact]
         public static void FromStringWithNull() =>
-            FluentActions.Invoking(() => PersonalAccessToken.FromString(null))
+            PersonalAccessToken.FromString(null)
                 .Should()
-                .Throw<ArgumentNullException>();
+                .Be(PersonalAccessToken.Empty);
     }
 }

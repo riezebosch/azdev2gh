@@ -10,12 +10,12 @@ namespace AzureDevOpsRest.Requests.Tests
 {
     public class BuildTests
     {
+        private readonly Client _client = new Client("manuel");
+
         [Fact]
         public async Task Definition()
         {
-            var client = new Client("manuel");
-            var result = await client.GetAsync(Build.Definition("packer-tasks", 27));
-
+            var result = await _client.GetAsync(Build.Definition("packer-tasks", 27));
             result.Should().BeEquivalentTo(new Definition
             {
                 Id = 27,
@@ -24,34 +24,27 @@ namespace AzureDevOpsRest.Requests.Tests
         }
         
         [Fact]
-        public void Definitions()
-        {
-            var client = new Client("manuel");
-            client
+        public void Definitions() =>
+            _client
                 .GetAsync(Build.Definitions("packer-tasks"))
                 .ToEnumerable()
                 .Should()
                 .NotBeEmpty();
-        }
-        
+
         [Fact]
-        public void Continuation()
-        {
-            var client = new Client("manuel");
-            client
+        public void Continuation() =>
+            _client
                 .GetAsync(Build.Builds("packer-tasks").WithQueryParams(("$top", 2)))
                 .ToEnumerable()
                 .Count()
                 .Should()
                 .BeGreaterThan(4);
-        }
 
         [Fact]
-        public static async Task InvalidApiVersion_BadRequest()
+        public async Task InvalidApiVersion_BadRequest()
         {
-            var client = new Client("manuel");
-            var ex = await client
-                .Invoking(x => x.GetAsync(new Request<object>($"packer-tasks/_apis/build/definitions", "89")))
+            var ex = await _client
+                .Invoking(x => x.GetAsync(Build.Definition("packer-tasks", 1).WithQueryParams(("api-version", "89"))))
                 .Should()
                 .ThrowAsync<FlurlHttpException>();
 

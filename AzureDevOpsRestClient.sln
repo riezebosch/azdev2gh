@@ -1,22 +1,10 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Client", "Client\Client.csproj", "{C624BB4D-A232-4709-BF49-6598DD45F480}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Client.Tests", "Client.Tests\Client.Tests.csproj", "{E490418F-D0AE-4F40-89D3-473021E1C9A3}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Items", "Items", "{40D5CCAA-640E-4715-BF90-78343424E2BE}"
 ProjectSection(SolutionItems) = preProject
 	.gitignore = .gitignore
 	.editorconfig = .editorconfig
 EndProjectSection
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Data", "Data\Data.csproj", "{1CA7D602-3E81-4A36-A67E-D77639E7EAD8}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Requests", "Requests\Requests.csproj", "{1F99276A-C668-4B01-9802-9524D94772C3}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Requests.Tests", "Requests.Tests\Requests.Tests.csproj", "{F6BD0901-1697-46BC-AC53-E5E59D1C4E0C}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OfficialSdk.Tests", "OfficialSdk.Tests\OfficialSdk.Tests.csproj", "{C28A41C8-A2CF-4AA7-83D9-626F0A281C2C}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ToGithub", "ToGithub\ToGithub.csproj", "{026BDE47-D685-4FF0-A9EB-3344B7631FBF}"
 EndProject
@@ -28,30 +16,6 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{C624BB4D-A232-4709-BF49-6598DD45F480}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{C624BB4D-A232-4709-BF49-6598DD45F480}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{C624BB4D-A232-4709-BF49-6598DD45F480}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{C624BB4D-A232-4709-BF49-6598DD45F480}.Release|Any CPU.Build.0 = Release|Any CPU
-		{E490418F-D0AE-4F40-89D3-473021E1C9A3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{E490418F-D0AE-4F40-89D3-473021E1C9A3}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{E490418F-D0AE-4F40-89D3-473021E1C9A3}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{E490418F-D0AE-4F40-89D3-473021E1C9A3}.Release|Any CPU.Build.0 = Release|Any CPU
-		{1CA7D602-3E81-4A36-A67E-D77639E7EAD8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{1CA7D602-3E81-4A36-A67E-D77639E7EAD8}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{1CA7D602-3E81-4A36-A67E-D77639E7EAD8}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{1CA7D602-3E81-4A36-A67E-D77639E7EAD8}.Release|Any CPU.Build.0 = Release|Any CPU
-		{1F99276A-C668-4B01-9802-9524D94772C3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{1F99276A-C668-4B01-9802-9524D94772C3}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{1F99276A-C668-4B01-9802-9524D94772C3}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{1F99276A-C668-4B01-9802-9524D94772C3}.Release|Any CPU.Build.0 = Release|Any CPU
-		{F6BD0901-1697-46BC-AC53-E5E59D1C4E0C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{F6BD0901-1697-46BC-AC53-E5E59D1C4E0C}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{F6BD0901-1697-46BC-AC53-E5E59D1C4E0C}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{F6BD0901-1697-46BC-AC53-E5E59D1C4E0C}.Release|Any CPU.Build.0 = Release|Any CPU
-		{C28A41C8-A2CF-4AA7-83D9-626F0A281C2C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{C28A41C8-A2CF-4AA7-83D9-626F0A281C2C}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{C28A41C8-A2CF-4AA7-83D9-626F0A281C2C}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{C28A41C8-A2CF-4AA7-83D9-626F0A281C2C}.Release|Any CPU.Build.0 = Release|Any CPU
 		{026BDE47-D685-4FF0-A9EB-3344B7631FBF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{026BDE47-D685-4FF0-A9EB-3344B7631FBF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{026BDE47-D685-4FF0-A9EB-3344B7631FBF}.Release|Any CPU.ActiveCfg = Release|Any CPU

@@ -9,9 +9,10 @@
 
     <ItemGroup>
         <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.2.0" />
+        <PackageReference Include="Microsoft.TeamFoundationServer.Client" Version="16.153.0" />
         <PackageReference Include="System.Linq.Async" Version="4.0.0" />
-        <PackageReference Include="xunit" Version="2.4.0" />
-        <PackageReference Include="xunit.runner.visualstudio" Version="2.4.0" />
+        <PackageReference Include="xunit" Version="2.4.1" />
+        <PackageReference Include="xunit.runner.visualstudio" Version="2.4.1" />
         <PackageReference Include="coverlet.collector" Version="1.0.1" />
         <PackageReference Include="FluentAssertions" Version="5.10.0" />
         <PackageReference Include="coverlet.msbuild" Version="2.7.0">
@@ -21,6 +22,7 @@
     </ItemGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\Client.Tests\Client.Tests.csproj" />
       <ProjectReference Include="..\Client\Client.csproj" />
       <ProjectReference Include="..\Requests\Requests.csproj" />
     </ItemGroup>

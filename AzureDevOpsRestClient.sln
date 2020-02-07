@@ -1,0 +1,28 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Items", "Items", "{40D5CCAA-640E-4715-BF90-78343424E2BE}"
+ProjectSection(SolutionItems) = preProject
+	.gitignore = .gitignore
+	.editorconfig = .editorconfig
+EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ToGithub", "ToGithub\ToGithub.csproj", "{026BDE47-D685-4FF0-A9EB-3344B7631FBF}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ToGithub.Tests", "ToGithub.Tests\ToGithub.Tests.csproj", "{9AA73B39-4A08-420E-B514-420AE39E8A04}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{026BDE47-D685-4FF0-A9EB-3344B7631FBF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{026BDE47-D685-4FF0-A9EB-3344B7631FBF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{026BDE47-D685-4FF0-A9EB-3344B7631FBF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{026BDE47-D685-4FF0-A9EB-3344B7631FBF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9AA73B39-4A08-420E-B514-420AE39E8A04}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9AA73B39-4A08-420E-B514-420AE39E8A04}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9AA73B39-4A08-420E-B514-420AE39E8A04}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9AA73B39-4A08-420E-B514-420AE39E8A04}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal

@@ -20,5 +20,6 @@
             <PrivateAssets>all</PrivateAssets>
             <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
         </PackageReference>
+        <PackageReference Include="Microsoft.VisualStudio.Services.Client" Version="16.153.0" />
     </ItemGroup>
 </Project>

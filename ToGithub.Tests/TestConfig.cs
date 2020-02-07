@@ -4,9 +4,9 @@ namespace ToGithub.Tests
 {
     public class TestConfig
     {
-        public string Organization { get; set; }
-        public string Token { get; set; }
-        public string GithubToken { get; set; }
+        public AzureDevops AzDo { get; set; }
+        public GitHub GitHub { get; set; }        
+       
 
         public TestConfig()
         {
@@ -17,5 +17,18 @@ namespace ToGithub.Tests
             
             configuration.Bind(this);
         }
+    }
+
+    public class GitHub
+    {
+        public string Repo { get; set; }
+        public string Owner { get; set; }
+        public string Token { get; set; }
+    }
+
+    public class AzureDevops
+    {
+        public string Organization { get; set; }
+        public string Token { get; set; }
     }
 }

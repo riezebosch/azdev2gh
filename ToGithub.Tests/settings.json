@@ -4,8 +4,6 @@
         "token": "put your PAT in settings.user.json",
     },
     "GitHub": {
-        "owner": "riezebosch",
-        "repo": "azure-devops-migration",
         "token": "Add in settings.user"
     }
 }

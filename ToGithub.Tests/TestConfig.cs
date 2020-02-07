@@ -21,8 +21,6 @@ namespace ToGithub.Tests
 
     public class GitHub
     {
-        public string Repo { get; set; }
-        public string Owner { get; set; }
         public string Token { get; set; }
     }
 

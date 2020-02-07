@@ -14,11 +14,12 @@ using Xunit;
 namespace ToGithub.Tests
 {
     
-    public class Tests : IClassFixture<TestConfig>
+    public class Tests : IClassFixture<TestConfig>, IDisposable, IAsyncLifetime
     {
         private readonly WorkItemTrackingHttpClient _client;
         private readonly GitHubClient _githubClient;
         private readonly TestConfig _config;
+        private Repository _repository;
 
         public Tests(TestConfig config)
         {
@@ -29,6 +30,8 @@ namespace ToGithub.Tests
             {
                 Credentials = new Credentials(config.GitHub.Token)
             };
+            
+            
         }
 
         [Fact]
@@ -67,15 +70,30 @@ namespace ToGithub.Tests
         {
             await foreach (var item in GetWorkItems(_client))
             {
-            
                 item.Fields.TryGetValue("System.Description", out string body);
                     
-                await _githubClient.Issue.Create(_config.GitHub.Owner, _config.GitHub.Repo,
+                await _githubClient.Issue.Create(_repository.Id,
                     new NewIssue(item.Fields["System.Title"].ToString())
                     {
                         Body =  body
                     });
             }
+        }
+
+
+        public void Dispose()
+        {
+            _client.Dispose();
+        }
+
+        public async Task InitializeAsync()
+        {
+            _repository = await _githubClient.Repository.Create(new NewRepository(Guid.NewGuid().ToString().Substring(0,8)));
+        }
+
+        public async Task DisposeAsync()
+        {
+            await _githubClient.Repository.Delete(_repository.Id);
         }
     }
 }

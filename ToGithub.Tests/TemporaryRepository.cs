@@ -19,14 +19,10 @@ namespace ToGithub.Tests
             };
         }
 
-        async Task IAsyncLifetime.InitializeAsync()
-        {
+        async Task IAsyncLifetime.InitializeAsync() => 
             Repository = await GithubClient.Repository.Create(new NewRepository(Guid.NewGuid().ToString().Substring(0,8)));
-        }
 
-        async Task IAsyncLifetime.DisposeAsync()
-        {
+        async Task IAsyncLifetime.DisposeAsync() => 
             await GithubClient.Repository.Delete(Repository.Id);
-        }
     }
 }

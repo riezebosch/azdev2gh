@@ -13,31 +13,24 @@ using Xunit;
 
 namespace ToGithub.Tests
 {
-    
-    public class Tests : IClassFixture<TestConfig>, IDisposable, IAsyncLifetime
+    public class Tests : IClassFixture<TestConfig>, IClassFixture<TemporaryRepository> , IDisposable
     {
-        private readonly WorkItemTrackingHttpClient _client;
-        private readonly GitHubClient _githubClient;
-        private readonly TestConfig _config;
-        private Repository _repository;
+        private readonly TemporaryRepository _repository;
+        private readonly VssConnection _connection;
 
-        public Tests(TestConfig config)
+        public Tests(TestConfig config, TemporaryRepository repository)
         {
-            _config = config;
-            var connection = new VssConnection(new Uri($"https://dev.azure.com/{config.AzDo.Organization}"), new VssBasicCredential("",config.AzDo.Token));
-            _client = connection.GetClient<WorkItemTrackingHttpClient>();
-            _githubClient = new GitHubClient(new ProductHeaderValue("azure-devops-github-migration"))
-            {
-                Credentials = new Credentials(config.GitHub.Token)
-            };
-            
-            
+            _repository = repository;
+            _connection = new VssConnection(new Uri($"https://dev.azure.com/{config.AzDo.Organization}"), 
+                new VssBasicCredential("", config.AzDo.Token));
         }
 
         [Fact]
         public void GetWorkItemIds()
         {
-            var result =  GetWorkItems(_client).ToEnumerable().ToList();
+            using var client = _connection.GetClient<WorkItemTrackingHttpClient>();
+            var result = GetWorkItems(client, "System.Id", "System.Title").ToEnumerable();
+
             result
                 .Should()
                 .NotBeEmpty()
@@ -46,33 +39,27 @@ namespace ToGithub.Tests
                 .First()
                 .Fields
                 .Should()
-                .ContainKeys("System.Title", "System.Description");
+                .ContainKeys("System.Title");
         }
 
-        private static async IAsyncEnumerable<WorkItem> GetWorkItems(WorkItemTrackingHttpClient client)
+        private static async IAsyncEnumerable<WorkItem> GetWorkItems(WorkItemTrackingHttpClient client, params string[] fields)
         {
-            var wiql = new Wiql()
+            var result = await client.QueryByWiqlAsync(new Wiql { Query = "Select [System.Id] From WorkItems" });
+            foreach (var item in result.WorkItems)
             {
-                Query = "Select [Id], [State], [Title] " +
-                        "From WorkItems"
-            };
-            var result = await client.QueryByWiqlAsync(wiql);
-
-            foreach (var workItem in result.WorkItems)
-            {
-                yield return await client.GetWorkItemAsync(workItem.Id, new []{"System.Id", "System.Title", "System.Description"});
+                yield return await client.GetWorkItemAsync(item.Id, fields);
             }
-            
         }
         
         [Fact] 
         public async Task CreateIssueFromWorkItem()
         {
-            await foreach (var item in GetWorkItems(_client))
+            using var client = _connection.GetClient<WorkItemTrackingHttpClient>();
+            foreach (var item in GetWorkItems(client, "System.Id", "System.Title", "System.Description").ToEnumerable().Take(5))
             {
                 item.Fields.TryGetValue("System.Description", out string body);
                     
-                await _githubClient.Issue.Create(_repository.Id,
+                await _repository.GithubClient.Issue.Create(_repository.Repository.Id,
                     new NewIssue(item.Fields["System.Title"].ToString())
                     {
                         Body =  body
@@ -80,20 +67,6 @@ namespace ToGithub.Tests
             }
         }
 
-
-        public void Dispose()
-        {
-            _client.Dispose();
-        }
-
-        public async Task InitializeAsync()
-        {
-            _repository = await _githubClient.Repository.Create(new NewRepository(Guid.NewGuid().ToString().Substring(0,8)));
-        }
-
-        public async Task DisposeAsync()
-        {
-            await _githubClient.Repository.Delete(_repository.Id);
-        }
+        public void Dispose() => _connection.Disconnect();
     }
 }

@@ -4,6 +4,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Items", "Items", "{40D5CCAA
 ProjectSection(SolutionItems) = preProject
 	.gitignore = .gitignore
 	.editorconfig = .editorconfig
+	README.md = README.md
 EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ToGithub", "ToGithub\ToGithub.csproj", "{026BDE47-D685-4FF0-A9EB-3344B7631FBF}"

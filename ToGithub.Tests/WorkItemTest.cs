@@ -2,7 +2,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using FluentAssertions;
 using Microsoft.TeamFoundation.WorkItemTracking.WebApi;
 using Microsoft.TeamFoundation.WorkItemTracking.WebApi.Models;
@@ -36,6 +35,23 @@ namespace ToGithub.Tests
                 .Fields
                 .Should()
                 .ContainKeys("System.Title");
+        }
+
+        [Fact]
+        public void ToIssueTest()
+        {
+            var item = new WorkItem { Fields = new Dictionary<string, object>
+                {
+                    ["System.Title"] = "title",
+                    ["System.Description"] = "description"
+                }};
+
+            item.ToIssue()
+                .Should()
+                .BeEquivalentTo(new NewIssue("title")
+                {
+                    Body = "description"
+                });
         }
 
         public void Dispose() => _connection.Disconnect();

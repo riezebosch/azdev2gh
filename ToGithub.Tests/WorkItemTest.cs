@@ -53,7 +53,7 @@ namespace ToGithub.Tests
                     Body = "description"
                 });
         }
-
+        
         public void Dispose() => _connection.Disconnect();
     }
 }

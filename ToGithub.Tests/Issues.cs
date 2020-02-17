@@ -27,7 +27,9 @@ namespace ToGithub.Tests
             using var client = _connection.GetClient<WorkItemTrackingHttpClient>();
             foreach (var item in client.GetWorkItems("System.Id", "System.Title", "System.Description").ToEnumerable().Take(75))
             {
-                await _repository.GithubClient.Issue.Create(_repository.Repository.Id, item.ToIssue());
+                await _repository.GithubClient.Issue.Create(
+                    _repository.Repository.Id, 
+                    item.ToIssue().ToMarkdown());
             }
         }
 

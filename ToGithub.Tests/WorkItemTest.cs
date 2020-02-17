@@ -18,7 +18,7 @@ namespace ToGithub.Tests
         public void GetWorkItemsTest()
         {
             using var client = _project.Connection.GetClient<WorkItemTrackingHttpClient>();
-            var result = client.GetWorkItems("System.Id", "System.Title").ToEnumerable();
+            var result = client.GetWorkItems(_project.Name, "System.Id", "System.Title").ToEnumerable();
 
             result
                 .Should()

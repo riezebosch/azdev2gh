@@ -9,9 +9,9 @@ namespace ToGithub
 {
     public static class WorkItemExtensions
     {
-        public static async IAsyncEnumerable<WorkItem> GetWorkItems(this WorkItemTrackingHttpClient client, params string[] fields)
+        public static async IAsyncEnumerable<WorkItem> GetWorkItems(this WorkItemTrackingHttpClient client, string name, params string[] fields)
         {
-            var result = await client.QueryByWiqlAsync(new Wiql { Query = "Select [System.Id] From WorkItems" });
+            var result = await client.QueryByWiqlAsync(new Wiql { Query = $"Select [System.Id] From WorkItems WHERE [System.TeamProject] = '{name}'" });
             foreach (var item in result.WorkItems)
             {
                 yield return await client.GetWorkItemAsync(item.Id, fields);

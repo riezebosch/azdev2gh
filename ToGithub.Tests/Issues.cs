@@ -24,7 +24,7 @@ namespace ToGithub.Tests
         public async Task CreateIssueFromWorkItem()
         {
             using var client = _project.Connection.GetClient<WorkItemTrackingHttpClient>();
-            foreach (var item in client.GetWorkItems("System.Id", "System.Title", "System.Description").ToEnumerable().Take(75))
+            await foreach (var item in client.GetWorkItems(_project.Name, "System.Id", "System.Title", "System.Description"))
             {
                 await _repository.GithubClient.Issue.Create(
                     _repository.Repository.Id, 

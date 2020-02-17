@@ -9,22 +9,21 @@ using Xunit;
 
 namespace ToGithub.Tests
 {
-    public class Tests : IClassFixture<TestConfig>, IClassFixture<TemporaryRepository> , IDisposable
+    public class Tests : IClassFixture<TemporaryTeamProject>, IClassFixture<TemporaryRepository>
     {
+        private readonly TemporaryTeamProject _project;
         private readonly TemporaryRepository _repository;
-        private readonly VssConnection _connection;
 
-        public Tests(TestConfig config, TemporaryRepository repository)
+        public Tests(TemporaryTeamProject project, TemporaryRepository repository)
         {
+            _project = project;
             _repository = repository;
-            _connection = new VssConnection(new Uri($"https://dev.azure.com/{config.AzDo.Organization}"), 
-                new VssBasicCredential("", config.AzDo.Token));
         }
 
         [Fact] 
         public async Task CreateIssueFromWorkItem()
         {
-            using var client = _connection.GetClient<WorkItemTrackingHttpClient>();
+            using var client = _project.Connection.GetClient<WorkItemTrackingHttpClient>();
             foreach (var item in client.GetWorkItems("System.Id", "System.Title", "System.Description").ToEnumerable().Take(75))
             {
                 await _repository.GithubClient.Issue.Create(
@@ -32,7 +31,5 @@ namespace ToGithub.Tests
                     item.ToIssue().ToMarkdown());
             }
         }
-
-        public void Dispose() => _connection.Disconnect();
     }
 }

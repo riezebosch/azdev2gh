@@ -1,4 +1,13 @@
+using System;
+using System.Linq;
+using System.Threading.Tasks;
 using FluentAssertions;
+using Microsoft.TeamFoundation.WorkItemTracking.WebApi;
+using Microsoft.TeamFoundation.WorkItemTracking.WebApi.Models;
+using Microsoft.VisualStudio.Services.Common;
+using Microsoft.VisualStudio.Services.WebApi;
+using Microsoft.VisualStudio.Services.WebApi.Patch;
+using Microsoft.VisualStudio.Services.WebApi.Patch.Json;
 using Octokit;
 using Xunit;
 
@@ -60,6 +69,32 @@ public static void Main() {}
                     .Body
                     .Should()
                     .BeNull();
+        }
+    }
+
+    public class TasksToList : IClassFixture<TestConfig>, IClassFixture<TemporaryTeamProject>
+    {
+        private readonly TemporaryTeamProject _project;
+        private readonly VssConnection _connection;
+
+        public TasksToList(TestConfig config, TemporaryTeamProject project)
+        {
+            _project = project;
+            _connection = new VssConnection(new Uri($"https://dev.azure.com/{config.AzDo.Organization}"),
+                new VssBasicCredential("", config.AzDo.Token));
+        }
+
+        [Fact]
+        public async Task Do()
+        {
+            using var client = _connection.GetClient<WorkItemTrackingHttpClient>();
+            var query = await client.QueryByWiqlAsync(new Wiql { Query = 
+                $"SELECT [System.Id] FROM Workitems WHERE [System.TeamProject] = '{_project.Name}'" });
+
+            query
+                .WorkItems
+                .Should()
+                .HaveCount(2);
         }
     }
 }

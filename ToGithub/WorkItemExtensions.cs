@@ -8,6 +8,9 @@ namespace ToGithub
 {
     public static class WorkItemExtensions
     {
+        /// <summary>
+        /// https://docs.microsoft.com/en-us/azure/devops/integrate/quickstarts/work-item-quickstart?view=azure-devops#c-code-snippet
+        /// </summary>
         public static async IAsyncEnumerable<WorkItem> GetWorkItems(this WorkItemTrackingHttpClient client, string name, params string[] fields)
         {
             var result = await client.QueryByWiqlAsync(new Wiql { Query = $"Select [System.Id] From WorkItems WHERE [System.TeamProject] = '{name}'" });

@@ -26,6 +26,9 @@ namespace ToGithub.IntegrationTests
                 new VssBasicCredential("", config.AzDo.Token));
         }
 
+        /// <summary>
+        /// Thanks to: https://blog.joergbattermann.com/2016/04/16/vsts-tfs-rest-api-04-project-collections-and-projects/
+        /// </summary>
         private async Task CreateProject()
         {
             var client = Connection.GetClient<ProjectHttpClient>();
@@ -52,6 +55,9 @@ namespace ToGithub.IntegrationTests
             ThrowIfFailed(operation);
         }
 
+        /// <summary>
+        /// https://docs.microsoft.com/en-us/azure/devops/integrate/quickstarts/create-bug-quickstart?view=azure-devops#c-code-snippet
+        /// </summary>
         public async Task<WorkItem> CreateProductBacklogItem(string title)
         {
             var doc = new JsonPatchDocument

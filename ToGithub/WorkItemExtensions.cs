@@ -29,5 +29,22 @@ namespace ToGithub
             };
             return issue;
         }
+
+        public static async IAsyncEnumerable<WorkItemLink> HierarchyForwardRelatedItems(this WorkItemTrackingHttpClientBase client, WorkItem parent)
+        {
+            var result = await client.QueryByWiqlAsync(new Wiql
+            {
+                Query = $@"
+SELECT [System.Id]
+FROM WorkItemLinks
+WHERE ([Source].[System.Id] IN ({parent.Id})) 
+AND ([System.Links.LinkType] = 'System.LinkTypes.Hierarchy-Forward') "
+            });
+
+            foreach (var item in result.WorkItemRelations)
+            {
+                yield return item;
+            }
+        }
     }
 }

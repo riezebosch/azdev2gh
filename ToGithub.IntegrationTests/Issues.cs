@@ -19,7 +19,8 @@ namespace ToGithub.IntegrationTests
         public async Task CreateIssueFromWorkItem()
         {
             using var client = _project.Connection.GetClient<WorkItemTrackingHttpClient>();
-            await foreach (var item in client.GetWorkItems(_project.Name, "System.Id", "System.Title", "System.Description"))
+            var source = new FromAzureDevOps(client);
+            await foreach (var item in source.ProductBacklogItems(_project.Name, "System.Id", "System.Title", "System.Description"))
             {
                 await _repository.GithubClient.Issue.Create(
                     _repository.Repository.Id, 

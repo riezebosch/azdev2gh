@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 using Octokit;
 using Xunit;
 
-namespace ToGithub.Tests
+namespace ToGithub.IntegrationTests
 {
     public class TemporaryRepository : IAsyncLifetime
     {

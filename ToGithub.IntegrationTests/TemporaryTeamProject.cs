@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using Microsoft.TeamFoundation.Core.WebApi;
 using Microsoft.TeamFoundation.WorkItemTracking.WebApi;
@@ -9,16 +8,16 @@ using Microsoft.VisualStudio.Services.Common;
 using Microsoft.VisualStudio.Services.Operations;
 using Microsoft.VisualStudio.Services.WebApi;
 using Microsoft.VisualStudio.Services.WebApi.Patch.Json;
-using Octokit;
 using Xunit;
 using Operation = Microsoft.VisualStudio.Services.WebApi.Patch.Operation;
 
-namespace ToGithub.Tests
+namespace ToGithub.IntegrationTests
 {
     public class TemporaryTeamProject : IAsyncLifetime
     {
-        public VssConnection Connection { get; }
+        private const string Scrum = "6b724908-ef14-45cf-84f8-768b5384da45";
         public string Name { get; } = Guid.NewGuid().ToString().Substring(0, 8);
+        public VssConnection Connection { get; }
 
         public TemporaryTeamProject()
         {
@@ -27,23 +26,13 @@ namespace ToGithub.Tests
                 new VssBasicCredential("", config.AzDo.Token));
         }
 
-        async Task IAsyncLifetime.InitializeAsync()
-        {
-            await CreateProject(Name);
-
-            var parent = await CreateProductBacklogItem(Name);
-            var child = await CreateTask(Name);
-
-            await CreateLink(parent, child);
-        }
-        
-        private async Task CreateProject(string name)
+        private async Task CreateProject()
         {
             var client = Connection.GetClient<ProjectHttpClient>();
             var operation = await client
                 .QueueCreateProject(new TeamProject
                 {
-                    Name = name,
+                    Name = Name,
                     Description = "",
                     Visibility = ProjectVisibility.Public,
                     Capabilities = new Dictionary<string, Dictionary<string, string>>
@@ -54,23 +43,16 @@ namespace ToGithub.Tests
                         },
                         ["processTemplate"] = new Dictionary<string, string>
                         {
-                            ["templateTypeId"] =  "6b724908-ef14-45cf-84f8-768b5384da45"   
+                            ["templateTypeId"] =  Scrum
                         }
                     }
-                    
                 });
 
-            var operations = Connection.GetClient<OperationsHttpClient>();
-            while (operation.Status == OperationStatus.Queued || operation.Status == OperationStatus.InProgress)
-            {
-                operation = await operations.GetOperationAsync(operation.Id);
-                await Task.Delay(TimeSpan.FromSeconds(2));
-            }
-            
-            await Task.Delay(TimeSpan.FromSeconds(2));
+            await WaitForStatus(operation);
+            ThrowIfFailed(operation);
         }
 
-        private async Task<WorkItem> CreateProductBacklogItem(string name)
+        public async Task<WorkItem> CreateProductBacklogItem(string title)
         {
             var doc = new JsonPatchDocument
             {
@@ -78,14 +60,14 @@ namespace ToGithub.Tests
                 {
                     Operation = Operation.Add,
                     Path = "/fields/System.Title",
-                    Value = "Sample PBI"
+                    Value = title
                 }
             };
 
-            return await Connection.GetClient<WorkItemTrackingHttpClient>().CreateWorkItemAsync(doc, name, "Product Backlog Item");
+            return await Connection.GetClient<WorkItemTrackingHttpClient>().CreateWorkItemAsync(doc, Name, "Product Backlog Item");
         }
-        
-        private async Task<WorkItem> CreateTask(string name)
+
+        public async Task<WorkItem> CreateTask(string title)
         {
             var doc = new JsonPatchDocument
             {
@@ -93,14 +75,14 @@ namespace ToGithub.Tests
                 {
                     Operation = Operation.Add,
                     Path = "/fields/System.Title",
-                    Value = "Sample task"
+                    Value = title
                 }
             };
 
-            return await Connection.GetClient<WorkItemTrackingHttpClient>().CreateWorkItemAsync(doc, name, "Task");
+            return await Connection.GetClient<WorkItemTrackingHttpClient>().CreateWorkItemAsync(doc, Name, "Task");
         }
 
-        private async Task CreateLink(WorkItem parent, WorkItem child)
+        public async Task CreateLink(WorkItem parent, WorkItem child)
         {
             await Connection.GetClient<WorkItemTrackingHttpClient>().UpdateWorkItemAsync(new JsonPatchDocument
             {
@@ -117,25 +99,56 @@ namespace ToGithub.Tests
             }, "test", parent.Id.Value);
         }
 
-        async Task IAsyncLifetime.DisposeAsync()
+        private async Task DeleteTeamProject()
+        {
+            var operation = await QueueDeleteRetry();
+            await WaitForStatus(operation);
+            ThrowIfFailed(operation);
+        }
+
+        private async Task WaitForStatus(OperationReference operation)
+        {
+            var operations = Connection.GetClient<OperationsHttpClient>();
+            while (operation.Status == OperationStatus.Queued ||
+                   operation.Status == OperationStatus.InProgress ||
+                   operation.Status == OperationStatus.NotSet)
+            {
+                operation = await operations.GetOperationAsync(operation.Id);
+                await Task.Delay(TimeSpan.FromSeconds(1));
+            }
+        }
+
+        private async Task<OperationReference> QueueDeleteRetry()
         {
             var client = Connection.GetClient<ProjectHttpClient>();
             var project = await client.GetProject(Name);
-            var operation = await client
-                .QueueDeleteProject(project.Id);
-            
-            var operations = Connection.GetClient<OperationsHttpClient>();
-            while (operation.Status == OperationStatus.Queued || operation.Status == OperationStatus.InProgress)
-            {
-                operation = await operations.GetOperationAsync(operation.Id);
-                await Task.Delay(TimeSpan.FromSeconds(2));
-            }
 
+            while (true)
+            {
+                try
+                {
+                    return await client.QueueDeleteProject(project.Id);
+                }
+                catch (ProjectWorkPendingException)
+                {
+                    await Task.Delay(TimeSpan.FromSeconds(1));
+                }
+            }
+        }
+
+        private static void ThrowIfFailed(OperationReference operation)
+        {
             if (operation.Status == OperationStatus.Failed)
             {
-                throw new Exception("Delete Team Project failed.");
+                throw new Exception("Operation failed.");
             }
-            
+        }
+
+        async Task IAsyncLifetime.InitializeAsync() => await CreateProject();
+
+        async Task IAsyncLifetime.DisposeAsync()
+        {
+            await DeleteTeamProject();
             Connection.Dispose();
         }
     }

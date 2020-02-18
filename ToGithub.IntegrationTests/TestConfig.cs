@@ -1,6 +1,6 @@
 using Microsoft.Extensions.Configuration;
 
-namespace ToGithub.Tests
+namespace ToGithub.IntegrationTests
 {
     public class TestConfig
     {

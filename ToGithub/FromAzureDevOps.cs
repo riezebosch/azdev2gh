@@ -14,9 +14,9 @@ namespace ToGithub
         /// <summary>
         /// https://docs.microsoft.com/en-us/azure/devops/integrate/quickstarts/work-item-quickstart?view=azure-devops#c-code-snippet
         /// </summary>
-        public async IAsyncEnumerable<WorkItem> ProductBacklogItems(string name, params string[] fields)
+        public async IAsyncEnumerable<WorkItem> ProductBacklogItems(string area, params string[] fields)
         {
-            var result = await _client.QueryByWiqlAsync(new Wiql { Query = $"Select [System.Id] From WorkItems WHERE [System.TeamProject] = '{name}' AND [System.WorkItemType] = 'Product Backlog Item'" });
+            var result = await _client.QueryByWiqlAsync(new Wiql { Query = $"Select [System.Id] From WorkItems WHERE [System.AreaPath] UNDER '{area}' AND [System.WorkItemType] = 'Product Backlog Item'" });
             foreach (var item in result.WorkItems)
             {
                 yield return await _client.GetWorkItemAsync(item.Id, fields);

@@ -5,6 +5,7 @@ using System.Text;
 using Microsoft.TeamFoundation.WorkItemTracking.WebApi.Models;
 using Octokit;
 using ReverseMarkdown;
+using ReverseMarkdown.Converters;
 
 namespace ToGithub
 {
@@ -12,16 +13,19 @@ namespace ToGithub
     {
         public static NewIssue ToMarkdown(this NewIssue issue)
         {
-            issue.Body =  issue.Body != null
-                ? new Converter
+            var converter = new Converter
+            {
+                Config =
                 {
-                    Config =
-                    {
-                        GithubFlavored = true,
-                        RemoveComments = true,
-                        UnknownTags = Config.UnknownTagsOption.PassThrough
-                    }
-                }.Convert(issue.Body)
+                    GithubFlavored = true,
+                    RemoveComments = true,
+                    UnknownTags = Config.UnknownTagsOption.PassThrough, 
+                    TableWithoutHeaderRowHandling = Config.TableWithoutHeaderRowHandlingOption.EmptyRow
+                }
+            };
+            converter.Register("style", new Drop(converter));
+            issue.Body =  issue.Body != null
+                ? converter.Convert(issue.Body).Trim('\r', '\n', '\t', ' ')
                 : null;
 
             return issue;

@@ -26,8 +26,7 @@ namespace ToGithub.Tests
                     .ToMarkdown()
                     .Body
                     .Should()
-                    .Be(@"
-Some **bold**
+                    .Be(@"Some **bold**
 
 and some <u>underline</u>
 
@@ -47,12 +46,7 @@ public static void Main() {}
 
 
 
-😊
-
-
-
-
-");
+😊");
             }
 
             [Fact]
@@ -62,6 +56,20 @@ public static void Main() {}
                     .Body
                     .Should()
                     .BeNull();
+
+            [Fact]
+            public static void Styles()
+            {
+                var html =
+                    "<style>\r\ntable {\n}\n\ntd {\npadding:0px;\ncolor:black;\nfont-size:11.0pt;\nfont-weight:400;\nfont-style:normal;\ntext-decoration:none;\nfont-family:Calibri, sans-serif;\ntext-align:general;\nvertical-align:bottom;\nborder:none;\nwhite-space:nowrap;\n}\n\n.xl65 {\ncolor:#0563C1;\ntext-decoration:underline;\n}\n</style>\n\n\n\n\n<table border=0 cellpadding=0 cellspacing=0 width=434 style=\"border-collapse:collapse;width:434pt;\">\n <colgroup><col width=434 style=\"width:434pt;\">\n </colgroup><tbody><tr height=15 style=\"height:15.0pt;\">\n\n  <td height=15 class=xl65 width=434 style=\"height:15.0pt;width:434pt;\"><a href=\"https://www.microsoft.com/en-us/learning/exam-98-375.aspx\">Exam\n  98-375/Course 40375A: HTML5 App Development Fundamentals</a></td>\n\n </tr>\n</tbody></table>";
+                 new NewIssue(string.Empty) { Body = html }
+                     .ToMarkdown()
+                     .Body
+                     .Should()
+                     .Be(@"| <!----> |
+| --- |
+ | [Exam<br>  98-375/Course 40375A: HTML5 App Development Fundamentals](https://www.microsoft.com/en-us/learning/exam-98-375.aspx) |");
+            }
         }
 
         [Fact]

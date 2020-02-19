@@ -78,7 +78,7 @@ namespace ToGithub.IntegrationTests
             
             var client = _project.Connection.GetClient<WorkItemTrackingHttpClient>();
             var source = new FromAzureDevOps(client);
-            var related = source.ChildrenFor(parent)
+            var related = source.For(parent)
                 .ToEnumerable()
                 .ToList();
 
@@ -102,7 +102,7 @@ namespace ToGithub.IntegrationTests
 
             var client = _project.Connection.GetClient<WorkItemTrackingHttpClient>();
             var source = new FromAzureDevOps(client);
-            var related = source.ChildrenFor(parent)
+            var related = source.For(parent)
                 .ToEnumerable()
                 .ToList();
 

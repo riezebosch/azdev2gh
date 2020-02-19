@@ -26,7 +26,7 @@ namespace ToGithub.IntegrationTests
                 var issue = item
                     .ToIssue()
                     .ToMarkdown()
-                    .AddTaskList(source.ChildrenFor(item).ToEnumerable());
+                    .AddTaskList(source.For(item).ToEnumerable());
                 await _repository.GithubClient.Issue.Create(_repository.Repository.Id, issue);
             }
         }

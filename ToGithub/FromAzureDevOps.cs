@@ -5,7 +5,17 @@ using Microsoft.TeamFoundation.WorkItemTracking.WebApi.Models;
 
 namespace ToGithub
 {
-    public class FromAzureDevOps
+    public interface IResolveChildren
+    {
+        IAsyncEnumerable<WorkItem> For(WorkItem parent);
+    }
+
+    public interface IFromAzureDevOps
+    {
+        IAsyncEnumerable<WorkItem> ProductBacklogItems(string area, params string[] fields);
+    }
+
+    public class FromAzureDevOps : IFromAzureDevOps, IResolveChildren
     {
         private readonly WorkItemTrackingHttpClientBase _client;
 
@@ -23,7 +33,7 @@ namespace ToGithub
             }
         }
 
-        public async IAsyncEnumerable<WorkItem> ChildrenFor(WorkItem parent)
+        public async IAsyncEnumerable<WorkItem> For(WorkItem parent)
         {
             var result = await _client.QueryByWiqlAsync(new Wiql
             {

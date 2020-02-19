@@ -66,5 +66,21 @@ namespace ToGithub.IntegrationTests
                 .Should()
                 .BeEquivalentTo("System.Title", "System.State");;
         }
+        
+        [Fact]
+        public async Task ChildrenForEmpty()
+        {
+            var parent = await _project.CreateProductBacklogItem("Sample PBI");
+
+            var client = _project.Connection.GetClient<WorkItemTrackingHttpClient>();
+            var source = new FromAzureDevOps(client);
+            var related = source.ChildrenFor(parent)
+                .ToEnumerable()
+                .ToList();
+
+            related
+                .Should()
+                .BeEmpty();
+        }
     }
 }

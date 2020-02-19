@@ -30,6 +30,11 @@ namespace ToGithub
                 Query = QueryStolenFromAzureDevOps(parent)
             });
 
+            if (!result.WorkItemRelations.Any())
+            {
+                yield break;;
+            }
+            
             foreach (var item in await _client.GetWorkItemsAsync(
                 from x in result.WorkItemRelations
                 where x.Rel != null // remove self reference to parent

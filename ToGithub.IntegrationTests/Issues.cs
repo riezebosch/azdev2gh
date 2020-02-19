@@ -1,3 +1,4 @@
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.TeamFoundation.WorkItemTracking.WebApi;
 using Xunit;
@@ -22,9 +23,11 @@ namespace ToGithub.IntegrationTests
             var source = new FromAzureDevOps(client);
             await foreach (var item in source.ProductBacklogItems(_project.Name, "System.Id", "System.Title", "System.Description"))
             {
-                await _repository.GithubClient.Issue.Create(
-                    _repository.Repository.Id, 
-                    item.ToIssue().ToMarkdown());
+                var issue = item
+                    .ToIssue()
+                    .ToMarkdown()
+                    .AddTaskList(source.ChildrenFor(item).ToEnumerable());
+                await _repository.GithubClient.Issue.Create(_repository.Repository.Id, issue);
             }
         }
     }

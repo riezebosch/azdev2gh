@@ -1,4 +1,6 @@
+using System.Collections.Generic;
 using FluentAssertions;
+using Microsoft.TeamFoundation.WorkItemTracking.WebApi.Models;
 using Octokit;
 using Xunit;
 
@@ -60,6 +62,28 @@ public static void Main() {}
                     .Body
                     .Should()
                     .BeNull();
+        }
+
+        [Fact]
+        public static void AddTaskList()
+        {
+            var issue = new NewIssue("title") { Body = "body"};
+            issue.AddTaskList(new[]
+            {
+                new WorkItem
+                {
+                    Fields = new Dictionary<string, object>
+                    {
+                        ["System.Title"] = "title",
+                        ["System.State"] = "Done"
+                    }
+                }
+            }).Body
+                .Should()
+                .Be(@"body
+
+- [x] title");
+            
         }
     }
 }

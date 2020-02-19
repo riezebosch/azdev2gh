@@ -157,5 +157,19 @@ namespace ToGithub.IntegrationTests
             await DeleteTeamProject();
             Connection.Dispose();
         }
+
+        public Task<WorkItem> SetState(WorkItem item, string state)
+        {
+            var client = Connection.GetClient<WorkItemTrackingHttpClient>();
+            return client.UpdateWorkItemAsync(new JsonPatchDocument
+            {
+                new JsonPatchOperation
+                {
+                    Operation = Operation.Add,
+                    Path = "/fields/System.State",
+                    Value = state
+                }
+            }, item.Id.Value);
+        }
     }
 }

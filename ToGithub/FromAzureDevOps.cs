@@ -16,7 +16,7 @@ namespace ToGithub
         /// </summary>
         public async IAsyncEnumerable<WorkItem> ProductBacklogItems(string area, params string[] fields)
         {
-            var result = await _client.QueryByWiqlAsync(new Wiql { Query = $"Select [System.Id] From WorkItems WHERE [System.AreaPath] UNDER '{area}' AND [System.WorkItemType] = 'Product Backlog Item'" });
+            var result = await _client.QueryByWiqlAsync(new Wiql { Query = $"Select [System.Id] From WorkItems WHERE [System.AreaPath] UNDER '{area}' AND [System.WorkItemType] = 'Product Backlog Item' AND [System.State] NOT IN ('Done', 'Removed')" });
             foreach (var item in result.WorkItems)
             {
                 yield return await _client.GetWorkItemAsync(item.Id, fields);

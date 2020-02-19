@@ -1,7 +1,11 @@
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using FluentAssertions;
 using Microsoft.TeamFoundation.WorkItemTracking.WebApi;
+using Microsoft.TeamFoundation.WorkItemTracking.WebApi.Models;
+using Microsoft.VisualStudio.Services.WebApi.Patch;
+using Microsoft.VisualStudio.Services.WebApi.Patch.Json;
 using Xunit;
 
 namespace ToGithub.IntegrationTests
@@ -37,6 +41,30 @@ namespace ToGithub.IntegrationTests
                 .BeEquivalentTo("System.Id", "System.Title");;
         }
         
+        [Fact]
+        public async Task ProductBacklogItemsSkipDone()
+        {
+            var item = await _project.CreateProductBacklogItem("PBI");
+            await _project.SetState(item, "Done");
+
+            var source = new FromAzureDevOps(_project.Connection.GetClient<WorkItemTrackingHttpClient>());
+            source.ProductBacklogItems(_project.Name, "System.Id", "System.Title", "System.State").ToEnumerable()
+                .Should()
+                .NotContain(x => (string) x.Fields["System.State"] == "Done");
+        }
+        
+        [Fact]
+        public async Task ProductBacklogItemsSkipRemoved()
+        {
+            var item = await _project.CreateProductBacklogItem("PBI");
+            await _project.SetState(item, "Removed");
+
+            var source = new FromAzureDevOps(_project.Connection.GetClient<WorkItemTrackingHttpClient>());
+            source.ProductBacklogItems(_project.Name, "System.Id", "System.Title", "System.State").ToEnumerable()
+                .Should()
+                .NotContain(x => (string) x.Fields["System.State"] == "Removed");
+        }
+
         [Fact]
         public async Task ChildrenFor()
         {

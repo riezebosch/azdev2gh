@@ -1,11 +1,7 @@
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using FluentAssertions;
 using Microsoft.TeamFoundation.WorkItemTracking.WebApi;
-using Microsoft.TeamFoundation.WorkItemTracking.WebApi.Models;
-using Microsoft.VisualStudio.Services.WebApi.Patch;
-using Microsoft.VisualStudio.Services.WebApi.Patch.Json;
 using Xunit;
 
 namespace ToGithub.IntegrationTests
@@ -19,26 +15,18 @@ namespace ToGithub.IntegrationTests
         [Fact]
         public async Task ProductBacklogItems()
         {
-            await _project.CreateProductBacklogItem("Sample PBI");
-            await _project.CreateTask("Some Task");
-            
-            var client = _project.Connection.GetClient<WorkItemTrackingHttpClient>();
+            var pbi = await _project.CreateProductBacklogItem("Sample PBI");
+            var task = await _project.CreateTask("Some Task");
 
-            var source = new FromAzureDevOps(client);
-            var result = source.ProductBacklogItems(_project.Name, "System.Id", "System.Title").ToEnumerable();
+            var source = new FromAzureDevOps(_project.Connection.GetClient<WorkItemTrackingHttpClient>())
+                .As<IFromAzureDevOps>();
+            var result = source.ProductBacklogItems(_project.Name).ToEnumerable();
 
             result
                 .Should()
-                .Contain(x => (string)x.Fields["System.Title"] == "Sample PBI")
+                .Contain(pbi.Id.Value)
                 .And
-                .NotContain(x => (string)x.Fields["System.Title"] == "Some Task")
-                .And
-                .Subject
-                .First()
-                .Fields
-                .Keys
-                .Should()
-                .BeEquivalentTo("System.Id", "System.Title");;
+                .NotContain(task.Id.Value);
         }
         
         [Fact]
@@ -47,10 +35,11 @@ namespace ToGithub.IntegrationTests
             var item = await _project.CreateProductBacklogItem("PBI");
             await _project.SetState(item, "Done");
 
-            var source = new FromAzureDevOps(_project.Connection.GetClient<WorkItemTrackingHttpClient>());
-            source.ProductBacklogItems(_project.Name, "System.Id", "System.Title", "System.State").ToEnumerable()
+            var source = new FromAzureDevOps(_project.Connection.GetClient<WorkItemTrackingHttpClient>())
+                .As<IFromAzureDevOps>();
+            source.ProductBacklogItems(_project.Name).ToEnumerable()
                 .Should()
-                .NotContain(x => (string) x.Fields["System.State"] == "Done");
+                .NotContain(item.Id.Value);
         }
         
         [Fact]
@@ -59,14 +48,15 @@ namespace ToGithub.IntegrationTests
             var item = await _project.CreateProductBacklogItem("PBI");
             await _project.SetState(item, "Removed");
 
-            var source = new FromAzureDevOps(_project.Connection.GetClient<WorkItemTrackingHttpClient>());
-            source.ProductBacklogItems(_project.Name, "System.Id", "System.Title", "System.State").ToEnumerable()
+            var source = new FromAzureDevOps(_project.Connection.GetClient<WorkItemTrackingHttpClient>())
+                .As<IFromAzureDevOps>();
+            source.ProductBacklogItems(_project.Name).ToEnumerable()
                 .Should()
-                .NotContain(x => (string) x.Fields["System.State"] == "Removed");
+                .NotContain(item.Id.Value);
         }
 
         [Fact]
-        public async Task ChildrenFor()
+        public async Task TaskList()
         {
             var parent = await _project.CreateProductBacklogItem("Sample PBI");
             var child1 = await _project.CreateTask("Sample TASK1");
@@ -75,38 +65,32 @@ namespace ToGithub.IntegrationTests
 
             await _project.CreateLink(parent, child1);
             await _project.CreateLink(parent, child2);
-            
-            var client = _project.Connection.GetClient<WorkItemTrackingHttpClient>();
-            var source = new FromAzureDevOps(client);
-            var related = source.For(parent)
-                .ToEnumerable()
-                .ToList();
 
-            related
-                .Select(x => x.Id)
-                .Should()
-                .Equal(child1.Id, child2.Id);
+            var source = new FromAzureDevOps(_project.Connection.GetClient<WorkItemTrackingHttpClient>())
+                .As<IFromAzureDevOps>();
             
-            related
-                .First()
-                .Fields
-                .Keys
+            var issue = await source.ToIssue(parent.Id.Value);
+            issue
+                .Body
                 .Should()
-                .BeEquivalentTo("System.Title", "System.State");;
+                .Contain("Sample TASK1")
+                .And
+                .Contain("Sample TASK2")
+                .And
+                .NotContain("Sample TASK3");
         }
         
         [Fact]
-        public async Task ChildrenForEmpty()
+        public async Task TaskListEmpty()
         {
             var parent = await _project.CreateProductBacklogItem("Sample PBI");
-
-            var client = _project.Connection.GetClient<WorkItemTrackingHttpClient>();
-            var source = new FromAzureDevOps(client);
-            var related = source.For(parent)
-                .ToEnumerable()
-                .ToList();
-
-            related
+            var source = new FromAzureDevOps(_project.Connection.GetClient<WorkItemTrackingHttpClient>())
+                .As<IFromAzureDevOps>();
+            
+            var issue = await source.ToIssue(parent.Id.Value);
+            issue
+                .Body
+                .Trim()
                 .Should()
                 .BeEmpty();
         }

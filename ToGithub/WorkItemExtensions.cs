@@ -1,12 +1,11 @@
 using System;
-using System.Diagnostics;
 using Microsoft.TeamFoundation.WorkItemTracking.WebApi.Models;
 using Microsoft.VisualStudio.Services.Common;
 using Octokit;
 
 namespace ToGithub
 {
-    public static class WorkItemExtensions
+    internal static class WorkItemExtensions
     {
         public static NewIssue ToIssue(this WorkItem item)
         {

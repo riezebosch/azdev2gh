@@ -9,7 +9,7 @@ using ReverseMarkdown.Converters;
 
 namespace ToGithub
 {
-    public static class IssueExtensions
+    internal static class IssueExtensions
     {
         public static NewIssue ToMarkdown(this NewIssue issue)
         {

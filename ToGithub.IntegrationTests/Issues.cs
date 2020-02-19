@@ -1,5 +1,5 @@
-using System.Linq;
 using System.Threading.Tasks;
+using FluentAssertions;
 using Microsoft.TeamFoundation.WorkItemTracking.WebApi;
 using Xunit;
 
@@ -19,15 +19,11 @@ namespace ToGithub.IntegrationTests
         [Fact] 
         public async Task CreateIssueFromWorkItem()
         {
-            using var client = _project.Connection.GetClient<WorkItemTrackingHttpClient>();
-            var source = new FromAzureDevOps(client);
-            await foreach (var item in source.ProductBacklogItems(_project.Name, "System.Id", "System.Title", "System.Description"))
+            var source = new FromAzureDevOps(_project.Connection.GetClient<WorkItemTrackingHttpClient>())
+                .As<IFromAzureDevOps>();
+            await foreach (var id in source.ProductBacklogItems(_project.Name))
             {
-                var issue = item
-                    .ToIssue()
-                    .ToMarkdown()
-                    .AddTaskList(source.For(item).ToEnumerable());
-                await _repository.GithubClient.Issue.Create(_repository.Repository.Id, issue);
+                await _repository.GithubClient.Issue.Create(_repository.Repository.Id, await source.ToIssue(id));
             }
         }
     }

@@ -19,7 +19,7 @@ namespace Functions.Activities
         [FunctionName(nameof(GetProductBacklogItems))]
         public IEnumerable<int> Run([ActivityTrigger]AzureDevOpsData data)
         {
-            return _source(data).ProductBacklogItems(data.AreaPath).ToEnumerable();
+            return _source(data).ProductBacklogItems(data.AreaPath).ToEnumerable().Take(50);
         }
     }
 }

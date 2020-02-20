@@ -1,6 +1,7 @@
 using System;
 using System.Threading.Tasks;
 using Microsoft.Azure.WebJobs;
+using Microsoft.Azure.WebJobs.Extensions.DurableTask;
 using Octokit;
 using ToGithub;
 
@@ -19,7 +20,7 @@ namespace Functions.Activities
         }
         
         [FunctionName(nameof(CreateIssueFromWorkItem))]
-        public  async Task Run((int id, int repository, GitHubData github, AzureDevOpsData azdo) data)
+        public  async Task Run([ActivityTrigger](int id, int repository, GitHubData github, AzureDevOpsData azdo) data)
         {
             var (id, repository, github, azdo) = data;
             

@@ -26,7 +26,7 @@ namespace Functions
                 
             builder.Services.AddScoped<Func<AzureDevOpsData, IFromAzureDevOps>>(provider => data =>
             {
-                var connection = provider.GetService<Func<string, string, VssConnection>>()(data.Organization, data.Token);
+                var connection = provider.GetService<Func<AzureDevOpsData, VssConnection>>()(data);
                 return new FromAzureDevOps(connection.GetClient<WorkItemTrackingHttpClient>());
             });
         }

@@ -22,8 +22,8 @@ namespace Functions.Tests.Orchestrations
             
             var context = new Mock<IDurableOrchestrationContext>(MockBehavior.Strict);
             context
-                .Setup(x => x.GetInput< (GitHubData, AzureDevOpsData)>())
-                .Returns((github, azdo));
+                .Setup(x => x.GetInput<PostData>())
+                .Returns(new PostData { GitHub = github, AzureDevOps = azdo });
             
             context
                 .Setup(x => x.CallActivityAsync<long>(nameof(CreateRepository), github))

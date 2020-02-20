@@ -1,5 +1,5 @@
 using System;
-using Functions.Activities;
+using Functions;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Azure.WebJobs.Hosting;
 using Microsoft.Extensions.DependencyInjection;
@@ -9,6 +9,7 @@ using Microsoft.VisualStudio.Services.WebApi;
 using Octokit;
 using ToGithub;
 
+[assembly: WebJobsStartup(typeof(Startup))]
 namespace Functions
 {
     public class Startup : IWebJobsStartup

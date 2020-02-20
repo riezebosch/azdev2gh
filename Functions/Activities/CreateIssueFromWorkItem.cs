@@ -1,17 +1,11 @@
 using System;
 using System.Threading.Tasks;
 using Microsoft.Azure.WebJobs;
-using Microsoft.Azure.WebJobs.Extensions.DurableTask;
 using Octokit;
 using ToGithub;
 
 namespace Functions.Activities
 {
-    public class GitHubData
-    {
-        public string Token { get; set; }
-    }
-
     public class CreateIssueFromWorkItem
     {
         private readonly Func<GitHubData, IGitHubClient> _target;
@@ -35,12 +29,5 @@ namespace Functions.Activities
             var target = _target(github);
             await target.Issue.Create(repository, item);
         }
-    }
-
-    public class AzureDevOpsData
-    {
-        public string Organization { get; set; }
-        public string Token { get; set; }
-        public string AreaPath { get; set; }
     }
 }

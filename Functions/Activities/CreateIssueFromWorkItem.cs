@@ -19,7 +19,7 @@ namespace Functions.Activities
         }
         
         [FunctionName(nameof(CreateIssueFromWorkItem))]
-        public  async Task Run([ActivityTrigger](int id, int repository) data)
+        public  async Task Run([ActivityTrigger](int id, long repository) data)
         {
             var item = await _source.ToIssue(data.id);
             await _target.Issue.Create(data.repository, item);

@@ -18,6 +18,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Functions", "Functions\Func
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Functions.Tests", "Functions.Tests\Functions.Tests.csproj", "{DFB554B2-1C96-4071-B47B-A66D10784DBC}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Functions.IntegrationTests", "Functions.IntegrationTests\Functions.IntegrationTests.csproj", "{DE2DD16A-BDB4-452E-BAF7-FFAEA3178555}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -44,5 +46,9 @@ Global
 		{DFB554B2-1C96-4071-B47B-A66D10784DBC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DFB554B2-1C96-4071-B47B-A66D10784DBC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DFB554B2-1C96-4071-B47B-A66D10784DBC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DE2DD16A-BDB4-452E-BAF7-FFAEA3178555}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DE2DD16A-BDB4-452E-BAF7-FFAEA3178555}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DE2DD16A-BDB4-452E-BAF7-FFAEA3178555}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DE2DD16A-BDB4-452E-BAF7-FFAEA3178555}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

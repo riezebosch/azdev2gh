@@ -14,7 +14,7 @@ namespace Functions.Orchestrations
         {
             var data = context.GetInput<PostData>();
             
-            var repository = await context.CallActivityAsync<long>(nameof(Crository), data.GitHub);
+            var repository = await context.CallActivityAsync<long>(nameof(CreateRepository), data.GitHub);
             var items = await context.CallActivityAsync<IEnumerable<int>>(nameof(GetProductBacklogItems), data.AzureDevOps);
 
             await Task.WhenAll(items.Select(id => context.CallActivityAsync<object>(nameof(CreateIssueFromWorkItem), (id, repository, data.GitHub, data.AzureDevOps))));

@@ -10,12 +10,12 @@ namespace Functions.Orchestrations
     {
         public static async Task Run([OrchestrationTrigger]IDurableOrchestrationContext context)
         {
-            var token = context.GetInput<string>();
+            var (github ,  azdo) = context.GetInput< (GitHubData, AzureDevOpsData)>();
             
-            var repository = await context.CallActivityAsync<long>(nameof(CreateRepository), token);
-            var items = await context.CallActivityAsync<IEnumerable<int>>(nameof(GetProductBacklogItems), null);
+            var repository = await context.CallActivityAsync<long>(nameof(CreateRepository), github);
+            var items = await context.CallActivityAsync<IEnumerable<int>>(nameof(GetProductBacklogItems), azdo);
 
-            await Task.WhenAll(items.Select(id => context.CallActivityAsync<object>(nameof(CreateIssueFromWorkItem), (id, repository))));
+            await Task.WhenAll(items.Select(id => context.CallActivityAsync<object>(nameof(CreateIssueFromWorkItem), (id, repository, github, azdo))));
         }
     }
 }

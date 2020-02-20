@@ -7,14 +7,14 @@ namespace Functions.Activities
 {
     public class CreateRepository
     {
-        private readonly Func<string, IGitHubClient> _github;
+        private readonly Func<GitHubData, IGitHubClient> _target;
 
-        public CreateRepository(Func<string, IGitHubClient> github) => 
-            _github = github;
+        public CreateRepository(Func<GitHubData, IGitHubClient> target) => 
+            _target = target;
 
-        public async Task<long> Run([ActivityTrigger] string token)
+        public async Task<long> Run([ActivityTrigger] GitHubData data)
         {
-            var client = _github(token);
+            var client = _target(data);
             var repository = await client.Repository.Create(new NewRepository(Guid.NewGuid().ToString().Substring(0, 8)));
             return repository.Id;
         }

@@ -1,3 +1,4 @@
+using System;
 using System.Threading.Tasks;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Azure.WebJobs.Extensions.DurableTask;
@@ -6,23 +7,40 @@ using ToGithub;
 
 namespace Functions.Activities
 {
+    public class GitHubData
+    {
+        public string Token { get; set; }
+    }
+
     public class CreateIssueFromWorkItem
     {
-        private readonly IGitHubClient _target;
-        private readonly IFromAzureDevOps _source;
+        private readonly Func<GitHubData, IGitHubClient> _target;
+        private readonly Func<AzureDevOpsData, IFromAzureDevOps> _source;
 
-        public CreateIssueFromWorkItem(IGitHubClient target,
-            IFromAzureDevOps source)
+        public CreateIssueFromWorkItem(Func<GitHubData, IGitHubClient> target,
+            Func<AzureDevOpsData, IFromAzureDevOps> source)
         {
             _target = target;
             _source = source;
         }
         
         [FunctionName(nameof(CreateIssueFromWorkItem))]
-        public  async Task Run([ActivityTrigger](int id, long repository) data)
+        public  async Task Run((int id, int repository, GitHubData github, AzureDevOpsData azdo) data)
         {
-            var item = await _source.ToIssue(data.id);
-            await _target.Issue.Create(data.repository, item);
+            var (id, repository, github, azdo) = data;
+            
+            var source = _source(azdo);
+            var item = await source.ToIssue(id);
+
+            var target = _target(github);
+            await target.Issue.Create(repository, item);
         }
+    }
+
+    public class AzureDevOpsData
+    {
+        public string Organization { get; set; }
+        public string Token { get; set; }
+        public string AreaPath { get; set; }
     }
 }

@@ -29,7 +29,8 @@ namespace Functions.Tests.Activities
             var github = Substitute.For<IGitHubClient>();
             
             // Act
-            await new CreateIssueFromWorkItem(github, fixture.Create<IFromAzureDevOps>()).Run((1234, 4234));
+            var function = new CreateIssueFromWorkItem((token) => github, data => fixture.Create<IFromAzureDevOps>());
+            await function.Run((1234, 4234, fixture.Create<GitHubData>(), fixture.Create<AzureDevOpsData>()));
 
             // Assert
             await github.Issue.Received().Create(4234, Arg.Any<NewIssue>());

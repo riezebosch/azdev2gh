@@ -15,9 +15,9 @@ namespace Functions.Tests.Activities
             var fixture = new Fixture().Customize(new AutoNSubstituteCustomization { ConfigureMembers = true});
             var source = fixture.Create<IFromAzureDevOps>();
             
-            var function = new GetProductBacklogItems(source);
+            var function = new GetProductBacklogItems(data => source);
             function
-                .Run(fixture.Create<string>())
+                .Run(fixture.Create<AzureDevOpsData>())
                 .Should()
                 .NotBeEmpty();
         }

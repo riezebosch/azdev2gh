@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Azure.WebJobs;
@@ -8,15 +9,17 @@ namespace Functions.Activities
 {
     public class GetProductBacklogItems
     {
-        private IFromAzureDevOps _source;
+        private readonly Func<AzureDevOpsData, IFromAzureDevOps> _source;
 
-        public GetProductBacklogItems(IFromAzureDevOps source)
+        public GetProductBacklogItems(Func<AzureDevOpsData, IFromAzureDevOps> source)
         {
             _source = source;
         }
 
         [FunctionName(nameof(GetProductBacklogItems))]
-        public IEnumerable<int> Run([ActivityTrigger]string area) => 
-            _source.ProductBacklogItems(area).ToEnumerable();
+        public IEnumerable<int> Run([ActivityTrigger]AzureDevOpsData data)
+        {
+            return _source(data).ProductBacklogItems(data.AreaPath).ToEnumerable();
+        }
     }
 }

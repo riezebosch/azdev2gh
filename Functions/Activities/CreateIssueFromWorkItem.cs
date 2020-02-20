@@ -20,9 +20,9 @@ namespace Functions.Activities
         }
         
         [FunctionName(nameof(CreateIssueFromWorkItem))]
-        public  async Task Run([ActivityTrigger](int id, int repository, GitHubData github, AzureDevOpsData azdo) data)
+        public  async Task Run([ActivityTrigger](int id, int repository, GitHubData github, AzureDevOpsData azdo) input)
         {
-            var (id, repository, github, azdo) = data;
+            var (id, repository, github, azdo) = input;
             
             var source = _source(azdo);
             var item = await source.ToIssue(id);

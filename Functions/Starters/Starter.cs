@@ -9,6 +9,7 @@ namespace Functions.Starters
 {
     public static class Starter
     {
+        [FunctionName(nameof(Starter))]
         public static async Task Run(
             [HttpTrigger(AuthorizationLevel.Anonymous, "POST", Route = "migrate")]HttpRequestMessage request,
             [DurableClient]IDurableOrchestrationClient client)

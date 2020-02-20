@@ -17,9 +17,9 @@ namespace Functions.Activities
         }
 
         [FunctionName(nameof(GetProductBacklogItems))]
-        public IEnumerable<int> Run([ActivityTrigger]AzureDevOpsData data)
+        public IEnumerable<int> Run([ActivityTrigger]AzureDevOpsData input)
         {
-            return _source(data).ProductBacklogItems(data.AreaPath).ToEnumerable().Take(50);
+            return _source(input).ProductBacklogItems(input.AreaPath).ToEnumerable().Take(50);
         }
     }
 }

@@ -5,10 +5,10 @@ import { Button, TextField, Card, Snackbar, CircularProgress } from '@material-u
 import { Alert } from '@material-ui/lab'
 
 function App() {
-  const [azureDevopsToken, setAzureDevopsToken] = useState<string>();
-  const [azureDevOpsOrganization, setAzureDevOpsOrganization] = useState<string>();
-  const [azureDevOpsAreaPath, setAzureDevOpsAreaPath] = useState<string>();
-  const [gitHubToken, setGitHubToken] = useState<string>();
+  const [azureDevopsToken, setAzureDevopsToken] = useState<string>('');
+  const [azureDevOpsOrganization, setAzureDevOpsOrganization] = useState<string>('');
+  const [azureDevOpsAreaPath, setAzureDevOpsAreaPath] = useState<string>('');
+  const [gitHubToken, setGitHubToken] = useState<string>('');
   const [loading, setLoading] = React.useState<boolean>(false);
   const [error, setError] = React.useState('');
 
@@ -56,7 +56,7 @@ function App() {
                 helperText="scope: public_repo" />
             </div>
             <div>
-              <Button disabled={ loading || [azureDevopsToken, azureDevOpsOrganization, azureDevOpsAreaPath, gitHubToken].includes(undefined) } onClick={() => {
+              <Button disabled={ loading || [azureDevopsToken, azureDevOpsOrganization, azureDevOpsAreaPath, gitHubToken].includes('') } onClick={() => {
                 setLoading(true);
                 axios.post('https://azdo2gh.azurewebsites.net/api/migrate', { 
                   azureDevOps: {

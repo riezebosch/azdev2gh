@@ -1,5 +1,5 @@
 import React from 'react';
-import { render, fireEvent, wait } from '@testing-library/react';
+import { render, fireEvent, wait, screen } from '@testing-library/react';
 import App from './App';
 import axios from 'axios'
 
@@ -67,4 +67,20 @@ test('show function error', async () => {
   fireEvent.click(getByRole('button'));
 
   await wait(() => getByText('function failed'));
+});
+
+test('go button disabled while required input empty', async () => {
+  const { getByLabelText, getByRole } = render(<App />);  
+  
+  fireEvent.change(getByLabelText('azure devops token *'), { target: { value: 'xxx' }});
+  expect(getByRole('button')).toHaveAttribute("disabled");
+
+  fireEvent.change(getByLabelText('organization *'), { target: { value: 'test' }});
+  expect(getByRole('button')).toHaveAttribute("disabled");
+
+  fireEvent.change(getByLabelText('area path *'), { target: { value: 'test/team A' }});
+  expect(getByRole('button')).toHaveAttribute("disabled");
+
+  fireEvent.change(getByLabelText('github token *'), { target: { value: 'yyy' }});
+  expect(getByRole('button')).not.toHaveAttribute("disabled");
 });

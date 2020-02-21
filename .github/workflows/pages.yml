@@ -1,0 +1,33 @@
+name: pages
+
+on:
+  push:
+    branches:
+      - master
+    paths:
+      - Functions.Frontend/**
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+      
+    steps:
+      - uses: actions/checkout@master
+      - uses: actions/setup-node@v1
+        with:
+          node-version: '10.x'
+      - uses: actions/cache@v1
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+      - run: |
+          npm install
+          CI=true npm run test
+          npm run build
+        working-directory: ./Functions.Frontend
+      - uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./Functions.Frontend/build
+          force_orphan: true

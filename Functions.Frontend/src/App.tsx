@@ -5,10 +5,10 @@ import { Button, TextField, Card, Snackbar, CircularProgress } from '@material-u
 import { Alert } from '@material-ui/lab'
 
 function App() {
-  const [azureDevopsToken, setAzureDevopsToken] = useState<string>('');
-  const [azureDevOpsOrganization, setAzureDevOpsOrganization] = useState<string>('');
-  const [azureDevOpsAreaPath, setAzureDevOpsAreaPath] = useState<string>('');
-  const [gitHubToken, setGitHubToken] = useState<string>('');
+  const [azureDevopsToken, setAzureDevopsToken] = useState<string>();
+  const [azureDevOpsOrganization, setAzureDevOpsOrganization] = useState<string>();
+  const [azureDevOpsAreaPath, setAzureDevOpsAreaPath] = useState<string>();
+  const [gitHubToken, setGitHubToken] = useState<string>();
   const [loading, setLoading] = React.useState<boolean>(false);
   const [error, setError] = React.useState('');
 
@@ -16,7 +16,7 @@ function App() {
     <div className="App">
       <header className="App-header">
         <Card>
-          <form style={{ padding: 15 }} >
+          <form style={{ padding: 15, width: 400 }} >
           <div>
             <TextField 
               label="azure devops token" 
@@ -24,6 +24,7 @@ function App() {
               value={azureDevopsToken}
               onChange={x => setAzureDevopsToken(x.currentTarget.value) }
               required={true}
+              fullWidth
               helperText="scope: Work Item (Read)" />
             </div>
             <div>
@@ -32,6 +33,7 @@ function App() {
                 id="azure-devops-organization"
                 value={azureDevOpsOrganization}
                 required={true}
+                fullWidth
                 onChange={x => setAzureDevOpsOrganization(x.currentTarget.value) } />
             </div>
             <div>
@@ -40,6 +42,7 @@ function App() {
                 id="azure-devops-areapath"
                 value={azureDevOpsAreaPath}
                 required={true}
+                fullWidth
                 onChange={x => setAzureDevOpsAreaPath(x.currentTarget.value) } />
             </div>
             <div>
@@ -48,11 +51,12 @@ function App() {
                 id="github-token"
                 value={gitHubToken}
                 required={true}
+                fullWidth
                 onChange={x => setGitHubToken(x.currentTarget.value) }
                 helperText="scope: public_repo" />
             </div>
             <div>
-              <Button disabled={loading} onClick={() => {
+              <Button disabled={ loading || [azureDevopsToken, azureDevOpsOrganization, azureDevOpsAreaPath, gitHubToken].includes(undefined) } onClick={() => {
                 setLoading(true);
                 axios.post('https://azdo2gh.azurewebsites.net/api/migrate', { 
                   azureDevOps: {

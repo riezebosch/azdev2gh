@@ -1,0 +1,15 @@
+name: infra
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+      - uses: azure/cli
+        with:
+        azcliversion: latest
+        inlineScript: |
+          az functionapp create -g azdo2gh -n azdo2gh -s azdo2gh --consumption-plan-location westeurope --os-type linux --runtime dotnet
+          az functionapp cors add -a http://localhost:3000 -n azdo2gh -g azdo2gh
+          az functionapp cors add -a https://riezebosch.github.io -n azdo2gh -g azdo2gh

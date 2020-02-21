@@ -10,12 +10,14 @@ namespace Functions.Starters
     public static class Starter
     {
         [FunctionName(nameof(Starter))]
-        public static async Task Run(
+        public static async Task<HttpResponseMessage> Run(
             [HttpTrigger(AuthorizationLevel.Anonymous, "POST", Route = "migrate")]HttpRequestMessage request,
             [DurableClient]IDurableOrchestrationClient client)
         {
             var data = await request.Content.ReadAsAsync<PostData>();
-            await client.StartNewAsync(nameof(Migrate), data);
+            var id = await client.StartNewAsync(nameof(Migrate), data);
+
+            return await client.WaitForCompletionOrCreateCheckStatusResponseAsync(request, id);
         }
     }
 }

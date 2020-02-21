@@ -1,5 +1,7 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
+using System.Text;
 using System.Threading.Tasks;
 using AutoFixture;
 using AutoFixture.AutoNSubstitute;
@@ -25,7 +27,11 @@ namespace Functions.IntegrationTests
             using var host = new HostBuilder()
                 .ConfigureWebJobs(builder => builder
                     .AddHttp()
-                    .AddDurableTask(options => options.HubName = nameof(Test1))
+                    .AddDurableTask(options =>
+                    {
+                        options.HubName = nameof(Test1);
+                        options.NotificationUrl = new Uri("https://google.com");
+                    })
                     .AddAzureStorageCoreServices()
                     .ConfigureServices(services => 
                         services
@@ -38,10 +44,15 @@ namespace Functions.IntegrationTests
             await jobs.Terminate()
                 .Purge();
 
+            await using var stream = new MemoryStream(Encoding.UTF8.GetBytes(
+                "{ 'github': { 'token': 'xxx' }, 'azureDevOps': { 'token': 'xxx', 'organization': 'test', 'areaPath': 'test' } }"));
+            var request = new DummyHttpRequest { Body = stream };
+            request.Headers.Add("Content-Type", "application/json");
+            
             // Act
             await jobs.CallAsync(nameof(Starter), new Dictionary<string, object>
             {
-                ["request"] = new DummyHttpRequest()
+                ["request"] = request
             });
 
             await jobs

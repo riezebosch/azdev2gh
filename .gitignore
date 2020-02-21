@@ -5,3 +5,4 @@ obj/
 settings.user.json
 /reports/
 coverage.opencover.xml
+.DS_Store

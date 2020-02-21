@@ -1,6 +1,17 @@
-# azdo2gh
+# Azure DevOps ⇒ GitHub
 
 This is the very beginning of Azure DevOps to GitHub migration tooling. 
-Backlog items are migrated to issues, tasks are merged into its parent as checkboxes and comments.
-Turn epics into tags so they'll migrate as labels. 
 
+## Flatten backlog
+
+All *open* Product Backlog Items are converted into issues.
+
+![backlog](docs/backlog.png)
+![issues](docs/issues.png)
+
+Related Tasks are converted into a task list:
+
+![pbi](docs/pbi.png)
+![issue](docs/issue.png)
+
+Try it out and [import](https://riezebosch.github.io/azdev2gh) the first 50 PBI's into a temporary repository!

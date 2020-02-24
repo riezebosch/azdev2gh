@@ -98,5 +98,17 @@ namespace ToGithub.Tests
                     .WithMessage("System.State: a3rjasldfjaf");
             }
         }
+
+        public static class ToComments
+        {
+            [Fact]
+            public static void ToMarkdown()
+            {
+                var source = new WorkItemComment { Text = "<div>first <b>comment</b></div>"};
+                source.ToComment()
+                    .Should()
+                    .Be("first **comment**");
+            }
+        }
     }
 }

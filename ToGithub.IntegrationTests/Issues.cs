@@ -1,6 +1,8 @@
+using System.Linq;
 using System.Threading.Tasks;
 using FluentAssertions;
 using Microsoft.TeamFoundation.WorkItemTracking.WebApi;
+using Microsoft.TeamFoundation.WorkItemTracking.WebApi.Models;
 using Xunit;
 
 namespace ToGithub.IntegrationTests
@@ -25,6 +27,30 @@ namespace ToGithub.IntegrationTests
             {
                 await _repository.GithubClient.Issue.Create(_repository.Repository.Id, await source.ToIssue(id));
             }
+        }
+        
+        [Fact]
+        public async Task ToComments()
+        {
+            var client = _project.Connection.GetClient<WorkItemTrackingHttpClient>();
+            var parent = await _project.CreateProductBacklogItem("Sample PBI");
+            await client.AddCommentAsync(new CommentCreate { Text = "first comment" }, _project.Name, parent.Id.Value);
+            await client.AddCommentAsync(new CommentCreate { Text = "second comment" }, _project.Name, parent.Id.Value);
+
+            var source = new FromAzureDevOps(client)
+                .As<IFromAzureDevOps>();
+
+            var issue = await _repository.GithubClient.Issue.Create(_repository.Repository.Id, await source.ToIssue(parent.Id.Value));
+            await foreach (var comment in source.ToComments(parent.Id.Value))
+            {
+                await _repository.GithubClient.Issue.Comment.Create(_repository.Repository.Id, issue.Number, comment);
+            }
+
+            var comments = await _repository.GithubClient.Issue.Comment.GetAllForIssue(_repository.Repository.Id, issue.Number);
+            comments
+                .Select(x => x.Body)
+                .Should()
+                .Equal("first comment", "second comment");
         }
     }
 }

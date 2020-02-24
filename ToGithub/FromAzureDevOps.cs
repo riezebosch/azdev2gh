@@ -11,6 +11,7 @@ namespace ToGithub
     {
         IAsyncEnumerable<int> ProductBacklogItems(string area);
         Task<NewIssue> ToIssue(int id);
+        IAsyncEnumerable<string> ToComments(int id);
     }
 
     public class FromAzureDevOps : IFromAzureDevOps
@@ -38,6 +39,14 @@ namespace ToGithub
                 .ToIssue()
                 .ToMarkdown()
                 .AddTaskList(RelatedFor(id).ToEnumerable());
+        }
+
+        public async IAsyncEnumerable<string> ToComments(int id)
+        {
+            foreach (var comment in (await _client.GetCommentsAsync(id)).Comments)
+            {
+                yield return comment.ToComment();
+            }
         }
 
         private async IAsyncEnumerable<WorkItem> RelatedFor(int id)

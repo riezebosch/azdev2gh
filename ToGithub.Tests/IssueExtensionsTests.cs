@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using FluentAssertions;
 using Microsoft.TeamFoundation.WorkItemTracking.WebApi.Models;
 using Octokit;
@@ -91,7 +92,15 @@ public static void Main() {}
                 .Be(@"body
 
 - [x] title");
-            
+        }
+        
+        [Fact]
+        public static void AddTaskListEmpty()
+        {
+            var issue = new NewIssue("title") { Body = "body"};
+            issue.AddTaskList(Enumerable.Empty<WorkItem>()).Body
+                .Should()
+                .Be(@"body");
         }
     }
 }

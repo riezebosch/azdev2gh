@@ -1,3 +1,4 @@
+using System;
 using System.IO;
 using System.Net.Http;
 using System.Net.Http.Headers;
@@ -26,6 +27,10 @@ namespace Functions.Tests.Starters
             client
                 .Setup(x => x.StartNewAsync<object>(nameof(Migrate), string.Empty, It.Is<PostData>(y => y.AzureDevOps.Organization == "test")))
                 .ReturnsAsync(fixture.Create<string>());
+            
+            client
+                .Setup(x => x.WaitForCompletionOrCreateCheckStatusResponseAsync(It.IsAny<HttpRequestMessage>(), It.IsAny<string>(), It.IsAny<TimeSpan>(), It.IsAny<TimeSpan>()))
+                .ReturnsAsync(fixture.Create<HttpResponseMessage>());
 
             // Act
             await using var stream = new MemoryStream(Encoding.UTF8.GetBytes(

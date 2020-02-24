@@ -24,5 +24,8 @@ namespace ToGithub
             "To Do" => $"- [ ] {item.Fields["System.Title"]}",
             var x  => throw new ArgumentException($"System.State: {x}")
         };
+
+        public static string ToComment(this WorkItemComment comment) => 
+            comment.Text.ToMarkdown();
     }
 }

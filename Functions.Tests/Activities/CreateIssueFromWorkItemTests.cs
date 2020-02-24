@@ -1,9 +1,8 @@
-using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using AutoFixture;
 using AutoFixture.AutoNSubstitute;
 using Functions.Activities;
-using Microsoft.TeamFoundation.WorkItemTracking.WebApi.Models;
 using NSubstitute;
 using Octokit;
 using ToGithub;
@@ -18,22 +17,23 @@ namespace Functions.Tests.Activities
         {
             // Arrange
             var fixture = new Fixture().Customize(new AutoNSubstituteCustomization { ConfigureMembers =  true});
-            fixture.Customize<WorkItem>(x => x.With(
-                y => y.Fields, new Dictionary<string, object>
-                {
-                    ["System.Title"] = fixture.Create<string>(),
-                    ["System.Description"] = fixture.Create<string>(),
-                    ["System.State"] = "To Do"
-                }));
+            var github = fixture.Create<IGitHubClient>();
+            var azdo = Substitute.For<IFromAzureDevOps>();
+            azdo
+                .ProductBacklogItems(Arg.Any<string>())
+                .Returns(fixture.CreateMany<int>().ToAsyncEnumerable());
             
-            var github = Substitute.For<IGitHubClient>();
+            azdo
+                .ToComments(Arg.Any<int>())
+                .Returns(fixture.CreateMany<string>().ToAsyncEnumerable());
             
             // Act
-            var function = new CreateIssueFromWorkItem((token) => github, data => fixture.Create<IFromAzureDevOps>());
+            var function = new CreateIssueFromWorkItem((token) => github, data => azdo);
             await function.Run((1234, 4234, fixture.Create<GitHubData>(), fixture.Create<AzureDevOpsData>()));
 
             // Assert
             await github.Issue.Received().Create(4234, Arg.Any<NewIssue>());
+            await github.Issue.Comment.Received().Create(4234, Arg.Any<int>(), Arg.Any<string>());
         }
     }
 }

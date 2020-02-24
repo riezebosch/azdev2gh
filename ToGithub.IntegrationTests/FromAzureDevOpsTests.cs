@@ -2,6 +2,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using FluentAssertions;
 using Microsoft.TeamFoundation.WorkItemTracking.WebApi;
+using Microsoft.TeamFoundation.WorkItemTracking.WebApi.Models;
 using Xunit;
 
 namespace ToGithub.IntegrationTests
@@ -90,9 +91,26 @@ namespace ToGithub.IntegrationTests
             var issue = await source.ToIssue(parent.Id.Value);
             issue
                 .Body
-                .Trim()
                 .Should()
-                .BeEmpty();
+                .BeNull();
+        }
+
+        [Fact]
+        public async Task Comments()
+        {
+            var parent = await _project.CreateProductBacklogItem("Sample PBI");
+            var client = _project.Connection.GetClient<WorkItemTrackingHttpClient>();
+            await client.AddCommentAsync(new CommentCreate { Text = "first comment" }, _project.Name, parent.Id.Value);
+            await client.AddCommentAsync(new CommentCreate { Text = "second comment" }, _project.Name, parent.Id.Value);
+            
+            var source = new FromAzureDevOps(_project.Connection.GetClient<WorkItemTrackingHttpClient>())
+                .As<IFromAzureDevOps>();
+
+            source
+                .ToComments(parent.Id.Value)
+                .ToEnumerable()
+                .Should()
+                .Equal("first comment", "second comment");
         }
     }
 }

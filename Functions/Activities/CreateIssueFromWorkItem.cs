@@ -28,7 +28,12 @@ namespace Functions.Activities
             var item = await source.ToIssue(id);
 
             var target = _target(github);
-            await target.Issue.Create(repository, item);
+            var issue = await target.Issue.Create(repository, item);
+
+            await foreach (var comment in source.ToComments(id))
+            {
+                await target.Issue.Comment.Create(repository, issue.Number, comment);
+            }
         }
     }
 }

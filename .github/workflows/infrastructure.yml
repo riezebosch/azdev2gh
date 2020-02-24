@@ -1,6 +1,11 @@
 name: infra
 
 on:
+  push:
+    branches:
+      - master
+    paths:
+      - .github/infrastructure.yml
 
 jobs:
   build-and-deploy:

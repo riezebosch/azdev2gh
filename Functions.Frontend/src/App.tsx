@@ -68,17 +68,17 @@ function App() {
                     token: gitHubToken
                   }
                 })
-                .then(r => r.data.runtimeStatus === 'Failed' ? setError('function failed') : setError(''))
+                .then(r => r.data?.runtimeStatus === 'Failed' ? setError('function failed') : setError(''))
                 .catch(x => setError(x.toString()))
                 .finally(() => setLoading(false))
               }}>Go!</Button>    
           </div>
           </form>
         </Card>
-        <Snackbar open={error !== ''} autoHideDuration={6000} onClose={ () => setError('') }>
+        <Snackbar open={error !== ''} autoHideDuration={6000} onClose={ () => setError('') } data-testid="error">
             <Alert severity='error'>{error}</Alert>
         </Snackbar>
-        <Snackbar open={loading} autoHideDuration={6000} onClose={ () => setLoading(false) }>
+        <Snackbar open={loading} autoHideDuration={6000} onClose={ () => setLoading(false) }  data-testid="loading">
           <CircularProgress />
         </Snackbar>
       </header>

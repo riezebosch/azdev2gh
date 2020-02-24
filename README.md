@@ -9,7 +9,7 @@ All *open* Product Backlog Items are converted into issues.
 ![backlog](docs/backlog.png)
 ![issues](docs/issues.png)
 
-Related Tasks are converted into a task list:
+Related Tasks are converted into a task list and added to the description of the issue:
 
 ![pbi](docs/pbi.png)
 ![issue](docs/issue.png)

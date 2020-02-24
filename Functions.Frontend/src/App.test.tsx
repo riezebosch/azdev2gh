@@ -1,5 +1,5 @@
 import React from 'react';
-import { render, fireEvent, wait, screen } from '@testing-library/react';
+import { render, fireEvent, wait, screen, waitForElementToBeRemoved, queryByTestId } from '@testing-library/react';
 import App from './App';
 import axios from 'axios'
 
@@ -67,6 +67,25 @@ test('show function error', async () => {
   fireEvent.click(getByRole('button'));
 
   await wait(() => getByText('function failed'));
+});
+
+test('show loading', async () => {
+  const { getByLabelText, getByRole, getByTestId, queryByTestId } = render(<App />);  
+
+  axiosMock.post.mockResolvedValue({ 
+    data: null
+  });
+
+  fireEvent.change(getByLabelText('azure devops token *'), { target: { value: 'xxx' }});
+  fireEvent.change(getByLabelText('organization *'), { target: { value: 'test' }});
+  fireEvent.change(getByLabelText('area path *'), { target: { value: 'test/team A' }});
+  fireEvent.change(getByLabelText('github token *'), { target: { value: 'yyy' }});
+  fireEvent.click(getByRole('button'));
+
+  await wait(() => getByTestId('loading'));
+  expect(queryByTestId('error')).toBe(null);  
+
+  await waitForElementToBeRemoved(() => getByTestId('loading'));
 });
 
 test('go button disabled while required input empty', async () => {

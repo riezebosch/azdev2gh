@@ -1,10 +1,10 @@
 import React from "react";
 import {
   render,
-  fireEvent,
   wait,
   waitForElementToBeRemoved
 } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
 import App from "./App";
 import axios from "axios";
 
@@ -19,19 +19,11 @@ describe("app", () => {
       data: { greeting: "hello there" }
     });
 
-    fireEvent.change(getByLabelText("azure devops token *"), {
-      target: { value: "xxx" }
-    });
-    fireEvent.change(getByLabelText("organization *"), {
-      target: { value: "test" }
-    });
-    fireEvent.change(getByLabelText("area path *"), {
-      target: { value: "test/team A" }
-    });
-    fireEvent.change(getByLabelText("github token *"), {
-      target: { value: "yyy" }
-    });
-    fireEvent.click(getByRole("button"));
+    userEvent.type(getByLabelText("azure devops token *"), "xxx");
+    userEvent.type(getByLabelText("organization *"), "test");
+    userEvent.type(getByLabelText("area path *"), "test/team A");
+    userEvent.type(getByLabelText("github token *"), "yyy");
+    userEvent.click(getByRole("button"));
 
     await wait(() => getByRole("button"));
     expect(axiosMock.post).toHaveBeenCalledWith(expect.any(String), {
@@ -51,19 +43,11 @@ describe("app", () => {
 
     axiosMock.post.mockRejectedValue("something wrong");
 
-    fireEvent.change(getByLabelText("azure devops token *"), {
-      target: { value: "xxx" }
-    });
-    fireEvent.change(getByLabelText("organization *"), {
-      target: { value: "test" }
-    });
-    fireEvent.change(getByLabelText("area path *"), {
-      target: { value: "test/team A" }
-    });
-    fireEvent.change(getByLabelText("github token *"), {
-      target: { value: "yyy" }
-    });
-    fireEvent.click(getByRole("button"));
+    userEvent.type(getByLabelText("azure devops token *"), "xxx");
+    userEvent.type(getByLabelText("organization *"), "test");
+    userEvent.type(getByLabelText("area path *"), "test/team A");
+    userEvent.type(getByLabelText("github token *"), "yyy");
+    userEvent.click(getByRole("button"));
 
     await wait(() => getByText("something wrong"));
   });
@@ -85,19 +69,11 @@ describe("app", () => {
       }
     });
 
-    fireEvent.change(getByLabelText("azure devops token *"), {
-      target: { value: "xxx" }
-    });
-    fireEvent.change(getByLabelText("organization *"), {
-      target: { value: "test" }
-    });
-    fireEvent.change(getByLabelText("area path *"), {
-      target: { value: "test/team A" }
-    });
-    fireEvent.change(getByLabelText("github token *"), {
-      target: { value: "yyy" }
-    });
-    fireEvent.click(getByRole("button"));
+    userEvent.type(getByLabelText("azure devops token *"), "xxx");
+    userEvent.type(getByLabelText("organization *"), "test");
+    userEvent.type(getByLabelText("area path *"), "test/team A");
+    userEvent.type(getByLabelText("github token *"), "yyy");
+    userEvent.click(getByRole("button"));
 
     await wait(() => getByText("function failed"));
   });
@@ -111,19 +87,11 @@ describe("app", () => {
       data: null
     });
 
-    fireEvent.change(getByLabelText("azure devops token *"), {
-      target: { value: "xxx" }
-    });
-    fireEvent.change(getByLabelText("organization *"), {
-      target: { value: "test" }
-    });
-    fireEvent.change(getByLabelText("area path *"), {
-      target: { value: "test/team A" }
-    });
-    fireEvent.change(getByLabelText("github token *"), {
-      target: { value: "yyy" }
-    });
-    fireEvent.click(getByRole("button"));
+    userEvent.type(getByLabelText("azure devops token *"), "xxx");
+    userEvent.type(getByLabelText("organization *"), "test");
+    userEvent.type(getByLabelText("area path *"), "test/team A");
+    userEvent.type(getByLabelText("github token *"), "yyy");
+    userEvent.click(getByRole("button"));
 
     await wait(() => getByTestId("loading"));
     expect(queryByTestId("error")).toBe(null);
@@ -134,24 +102,16 @@ describe("app", () => {
   it("disables go button until all required fields have value", async () => {
     const { getByLabelText, getByRole } = render(<App />);
 
-    fireEvent.change(getByLabelText("azure devops token *"), {
-      target: { value: "xxx" }
-    });
+    userEvent.type(getByLabelText("azure devops token *"), "xxx");
     expect(getByRole("button")).toHaveAttribute("disabled");
 
-    fireEvent.change(getByLabelText("organization *"), {
-      target: { value: "test" }
-    });
+    userEvent.type(getByLabelText("organization *"), "test");
     expect(getByRole("button")).toHaveAttribute("disabled");
 
-    fireEvent.change(getByLabelText("area path *"), {
-      target: { value: "test/team A" }
-    });
+    userEvent.type(getByLabelText("area path *"), "test/team A");
     expect(getByRole("button")).toHaveAttribute("disabled");
 
-    fireEvent.change(getByLabelText("github token *"), {
-      target: { value: "yyy" }
-    });
+    userEvent.type(getByLabelText("github token *"), "yyy");
     expect(getByRole("button")).not.toHaveAttribute("disabled");
   });
 });

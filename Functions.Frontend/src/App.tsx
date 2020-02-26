@@ -8,9 +8,11 @@ import {
   Snackbar,
   CircularProgress,
   CardContent,
-  Box
+  Box,
+  Link
 } from "@material-ui/core";
 import { Alert } from "@material-ui/lab";
+import LaunchIcon from "@material-ui/icons/Launch";
 
 function App() {
   const [azureDevopsToken, setAzureDevopsToken] = useState("");
@@ -52,15 +54,6 @@ function App() {
                 }}
               >
                 <TextField
-                  label="azure devops token"
-                  id="azure-devops-token"
-                  value={azureDevopsToken}
-                  onChange={x => setAzureDevopsToken(x.currentTarget.value)}
-                  required={true}
-                  fullWidth
-                  helperText="scope: Work Item (Read)"
-                />
-                <TextField
                   label="organization"
                   id="azure-devops-organization"
                   value={azureDevOpsOrganization}
@@ -71,12 +64,39 @@ function App() {
                   }
                 />
                 <TextField
+                  label="azure devops token"
+                  id="azure-devops-token"
+                  value={azureDevopsToken}
+                  onChange={x => setAzureDevopsToken(x.currentTarget.value)}
+                  required={true}
+                  fullWidth
+                  helperText={
+                    <span>
+                      scope: Work Item (Read)&nbsp;
+                      <Link
+                        href={
+                          "https://dev.azure.com/" +
+                          (azureDevOpsOrganization !== ""
+                            ? azureDevOpsOrganization + "/_usersSettings/tokens"
+                            : "")
+                        }
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        data-testid="azure-devops-token-url"
+                      >
+                        <LaunchIcon style={{ fontSize: 12 }} />
+                      </Link>
+                    </span>
+                  }
+                />
+                <TextField
                   label="area path"
                   id="azure-devops-areapath"
                   value={azureDevOpsAreaPath}
                   required={true}
                   fullWidth
                   onChange={x => setAzureDevOpsAreaPath(x.currentTarget.value)}
+                  helperText="query product backlog items under area path"
                 />
                 <TextField
                   label="github token"
@@ -85,7 +105,18 @@ function App() {
                   required={true}
                   fullWidth
                   onChange={x => setGitHubToken(x.currentTarget.value)}
-                  helperText="scope: public_repo"
+                  helperText={
+                    <span>
+                      scope: public_repo&nbsp;
+                      <Link
+                        href="https://github.com/settings/tokens"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        <LaunchIcon style={{ fontSize: 12 }} />
+                      </Link>
+                    </span>
+                  }
                 />
                 <Button
                   disabled={

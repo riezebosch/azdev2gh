@@ -2,7 +2,8 @@ import React from "react";
 import {
   render,
   wait,
-  waitForElementToBeRemoved
+  waitForElementToBeRemoved,
+  getByTestId
 } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import App from "./App";
@@ -113,5 +114,15 @@ describe("app", () => {
 
     userEvent.type(getByLabelText("github token *"), "yyy");
     expect(getByRole("button")).not.toHaveAttribute("disabled");
+  });
+
+  it("updates link to organization for azure devops token", async () => {
+    const { getByLabelText, getByTestId } = render(<App />);
+
+    userEvent.type(getByLabelText("organization *"), "test");
+    expect(getByTestId("azure-devops-token-url")).toHaveAttribute(
+      "href",
+      "https://dev.azure.com/test/_usersSettings/tokens"
+    );
   });
 });

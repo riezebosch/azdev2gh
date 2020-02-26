@@ -30,6 +30,7 @@ function App() {
             <CardContent>
               <form
                 onSubmit={e => {
+                  e.preventDefault(); // prevent from onSubmit errors in tests
                   setLoading(true);
                   axios
                     .post("https://azdo2gh.azurewebsites.net/api/migrate", {
@@ -49,8 +50,6 @@ function App() {
                     )
                     .catch(x => setError(x.toString()))
                     .finally(() => setLoading(false));
-
-                  e.preventDefault(); // prevent from onSubmit errors in tests
                 }}
               >
                 <TextField

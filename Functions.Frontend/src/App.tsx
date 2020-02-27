@@ -9,7 +9,8 @@ import {
   CircularProgress,
   CardContent,
   Box,
-  Link
+  Link,
+  Typography
 } from "@material-ui/core";
 import { Alert } from "@material-ui/lab";
 import LaunchIcon from "@material-ui/icons/Launch";
@@ -28,6 +29,14 @@ function App() {
         <Box width={1 / 2}>
           <Card>
             <CardContent>
+              <Typography
+                style={{ fontSize: 14 }}
+                color="textSecondary"
+                gutterBottom
+              >
+                Import the first 50 product backlog items from Azure DevOps into
+                GitHub
+              </Typography>
               <form
                 onSubmit={e => {
                   e.preventDefault(); // prevent from onSubmit errors in tests

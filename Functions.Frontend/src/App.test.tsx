@@ -1,10 +1,8 @@
 import React from "react";
 import {
   render,
-  wait,
-  waitForElementToBeRemoved,
-  getByTestId
-} from "@testing-library/react";
+  waitFor,
+  waitForElementToBeRemoved} from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import App from "./App";
 import axios from "axios";
@@ -26,7 +24,7 @@ describe("app", () => {
     userEvent.type(getByLabelText("github token *"), "yyy");
     userEvent.click(getByRole("button"));
 
-    await wait(() => getByRole("button"));
+    await waitFor(() => getByRole("button"));
     expect(axiosMock.post).toHaveBeenCalledWith(expect.any(String), {
       azureDevOps: {
         token: "xxx",
@@ -50,7 +48,7 @@ describe("app", () => {
     userEvent.type(getByLabelText("github token *"), "yyy");
     userEvent.click(getByRole("button"));
 
-    await wait(() => getByText("something wrong"));
+    await waitFor(() => getByText("something wrong"));
   });
 
   it("shows function error when runtime status is failed", async () => {
@@ -76,7 +74,7 @@ describe("app", () => {
     userEvent.type(getByLabelText("github token *"), "yyy");
     userEvent.click(getByRole("button"));
 
-    await wait(() => getByText("function failed"));
+    await waitFor(() => getByText("function failed"));
   });
 
   it("shows loading component while awaiting the api response", async () => {
@@ -94,7 +92,7 @@ describe("app", () => {
     userEvent.type(getByLabelText("github token *"), "yyy");
     userEvent.click(getByRole("button"));
 
-    await wait(() => getByTestId("loading"));
+    await waitFor(() => getByTestId("loading"));
     expect(queryByTestId("error")).toBe(null);
 
     await waitForElementToBeRemoved(() => getByTestId("loading"));

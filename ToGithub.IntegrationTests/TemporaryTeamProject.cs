@@ -22,8 +22,8 @@ namespace ToGithub.IntegrationTests
         public TemporaryTeamProject()
         {
             var config = new TestConfig();
-            Connection = new VssConnection(new Uri($"https://dev.azure.com/{config.AzDo.Organization}"), 
-                new VssBasicCredential("", config.AzDo.Token));
+            Connection = new VssConnection(new Uri($"https://dev.azure.com/{config.AzureDevOps.Organization}"), 
+                new VssBasicCredential("", config.AzureDevOps.Token));
         }
 
         /// <summary>

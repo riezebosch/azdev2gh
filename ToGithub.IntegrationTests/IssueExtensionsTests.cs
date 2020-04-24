@@ -17,8 +17,8 @@ namespace ToGithub.IntegrationTests
         public TasksToList(TestConfig config, TemporaryTeamProject project)
         {
             _project = project;
-            _connection = new VssConnection(new Uri($"https://dev.azure.com/{config.AzDo.Organization}"),
-                new VssBasicCredential("", config.AzDo.Token));
+            _connection = new VssConnection(new Uri($"https://dev.azure.com/{config.AzureDevOps.Organization}"),
+                new VssBasicCredential("", config.AzureDevOps.Token));
         }
 
         [Fact]

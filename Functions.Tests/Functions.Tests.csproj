@@ -8,6 +8,7 @@
 
     <ItemGroup>
         <PackageReference Include="AutoFixture.AutoNSubstitute" Version="4.11.0" />
+        <PackageReference Include="AzureFunctions.TestHelpers" Version="3.2.83" />
         <PackageReference Include="FakeItEasy" Version="6.0.0" />
         <PackageReference Include="FluentAssertions" Version="5.10.0" />
         <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.2.0" />

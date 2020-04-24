@@ -34,8 +34,8 @@ namespace Functions.IntegrationTests
                     .AddAzureStorageCoreServices()
                     .ConfigureServices(services => 
                         services
-                            .AddSingleton(fixture.Create<IFromAzureDevOps>())
-                            .AddSingleton(fixture.Create<IGitHubClient>())))
+                            .AddSingleton<Func<AzureDevOpsData, IFromAzureDevOps>>((AzureDevOpsData x) => fixture.Create<IFromAzureDevOps>())
+                            .AddSingleton<Func<GitHubData, IGitHubClient>>((GitHubData x) => fixture.Create<IGitHubClient>())))
                 .Build();
             
             await host.StartAsync();
@@ -43,10 +43,9 @@ namespace Functions.IntegrationTests
             await jobs.Terminate()
                 .Purge();
 
-            await using var stream = new MemoryStream(Encoding.UTF8.GetBytes(
-                "{ 'github': { 'token': 'xxx' }, 'azureDevOps': { 'token': 'xxx', 'organization': 'test', 'areaPath': 'test' } }"));
-            var request = new DummyHttpRequest { Body = stream };
-            request.Headers.Add("Content-Type", "application/json");
+            var request =
+                new DummyHttpRequest(
+                    "{ \"github\": { \"token\": \"xxx\" }, \"azureDevOps\": { \"token\": \"xxx\", \"organization\": \"test\", \"areaPath\": \"test\" } }");
             
             // Act
             await jobs.CallAsync(nameof(Starter), new Dictionary<string, object>

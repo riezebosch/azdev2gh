@@ -4,7 +4,7 @@ namespace ToGithub.IntegrationTests
 {
     public class TestConfig
     {
-        public AzureDevops AzDo { get; set; }
+        public AzureDevOps AzureDevOps { get; set; }
         public GitHub GitHub { get; set; }        
        
 
@@ -24,7 +24,7 @@ namespace ToGithub.IntegrationTests
         public string Token { get; set; }
     }
 
-    public class AzureDevops
+    public class AzureDevOps
     {
         public string Organization { get; set; }
         public string Token { get; set; }

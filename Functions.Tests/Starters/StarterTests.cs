@@ -1,16 +1,14 @@
 using System;
-using System.IO;
-using System.Net.Http;
-using System.Net.Http.Headers;
-using System.Text;
 using System.Threading.Tasks;
 using AutoFixture;
 using AutoFixture.AutoNSubstitute;
+using AzureFunctions.TestHelpers;
 using Functions.Orchestrations;
 using Functions.Starters;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.WebJobs.Extensions.DurableTask;
 using Moq;
-using NSubstitute;
 using Xunit;
 
 namespace Functions.Tests.Starters
@@ -29,19 +27,11 @@ namespace Functions.Tests.Starters
                 .ReturnsAsync(fixture.Create<string>());
             
             client
-                .Setup(x => x.WaitForCompletionOrCreateCheckStatusResponseAsync(It.IsAny<HttpRequestMessage>(), It.IsAny<string>(), It.IsAny<TimeSpan>(), It.IsAny<TimeSpan>()))
-                .ReturnsAsync(fixture.Create<HttpResponseMessage>());
+                .Setup(x => x.WaitForCompletionOrCreateCheckStatusResponseAsync(It.IsAny<HttpRequest>(), It.IsAny<string>(), It.IsAny<TimeSpan>(), It.IsAny<TimeSpan>()))
+                .ReturnsAsync(fixture.Create<IActionResult>());
 
             // Act
-            await using var stream = new MemoryStream(Encoding.UTF8.GetBytes(
-                "{ 'github': { 'token': 'xxx' }, 'azureDevOps': { 'token': 'xxx', 'organization': 'test', 'areaPath': 'test' } }"));
-            {
-                var request = Substitute.For<HttpRequestMessage>();
-                request.Content = new StreamContent(stream);
-                request.Content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
-
-                await Starter.Run(request, client.Object);
-            }
+            await Starter.Run(new DummyHttpRequest("{ \"github\": { \"token\": \"xxx\" }, \"azureDevOps\": { \"token\": \"xxx\", \"organization\": \"test\", \"areaPath\": \"test\" } }"), client.Object);
             
             // Assert
             client.VerifyAll();

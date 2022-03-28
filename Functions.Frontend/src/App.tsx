@@ -10,10 +10,10 @@ import {
   CardContent,
   Box,
   Link,
-  Typography
-} from "@material-ui/core";
-import { Alert } from "@material-ui/lab";
-import LaunchIcon from "@material-ui/icons/Launch";
+  Typography,
+  Alert
+} from "@mui/material"
+import { Launch  } from "@mui/icons-material"
 
 function App() {
   const [azureDevopsToken, setAzureDevopsToken] = useState("");
@@ -66,6 +66,7 @@ function App() {
                   id="azure-devops-organization"
                   value={azureDevOpsOrganization}
                   required={true}
+                  variant="standard"
                   fullWidth
                   onChange={x =>
                     setAzureDevOpsOrganization(x.currentTarget.value)
@@ -77,6 +78,7 @@ function App() {
                   value={azureDevopsToken}
                   onChange={x => setAzureDevopsToken(x.currentTarget.value)}
                   required={true}
+                  variant="standard"
                   fullWidth
                   helperText={
                     <span>
@@ -92,7 +94,7 @@ function App() {
                         rel="noopener noreferrer"
                         data-testid="azure-devops-token-url"
                       >
-                        <LaunchIcon style={{ fontSize: 12 }} />
+                        <Launch style={{ fontSize: 12 }} />
                       </Link>
                     </span>
                   }
@@ -102,6 +104,7 @@ function App() {
                   id="azure-devops-areapath"
                   value={azureDevOpsAreaPath}
                   required={true}
+                  variant="standard"
                   fullWidth
                   onChange={x => setAzureDevOpsAreaPath(x.currentTarget.value)}
                   helperText="query product backlog items under area path"
@@ -111,6 +114,7 @@ function App() {
                   id="github-token"
                   value={gitHubToken}
                   required={true}
+                  variant="standard"
                   fullWidth
                   onChange={x => setGitHubToken(x.currentTarget.value)}
                   helperText={
@@ -121,7 +125,7 @@ function App() {
                         target="_blank"
                         rel="noopener noreferrer"
                       >
-                        <LaunchIcon style={{ fontSize: 12 }} />
+                        <Launch style={{ fontSize: 12 }} />
                       </Link>
                     </span>
                   }

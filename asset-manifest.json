@@ -1,0 +1,13 @@
+{
+  "files": {
+    "main.css": "/azdev2gh/static/css/main.6f3fc5e5.css",
+    "main.js": "/azdev2gh/static/js/main.dd22f38d.js",
+    "index.html": "/azdev2gh/index.html",
+    "main.6f3fc5e5.css.map": "/azdev2gh/static/css/main.6f3fc5e5.css.map",
+    "main.dd22f38d.js.map": "/azdev2gh/static/js/main.dd22f38d.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.6f3fc5e5.css",
+    "static/js/main.dd22f38d.js"
+  ]
+}
